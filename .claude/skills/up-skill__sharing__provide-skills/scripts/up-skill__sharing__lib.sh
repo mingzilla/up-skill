@@ -96,7 +96,9 @@ us_init() {
   us_require git
   if [[ -n "${UP_SKILL_WORKSPACE:-}" && -d "$UP_SKILL_WORKSPACE" ]]; then
     US_WORKSPACE="$UP_SKILL_WORKSPACE"
-  elif ! us_locate_workspace "$start"; then
+  elif ! us_locate_workspace "$start" && [[ -d "$HOME/.up-skill__workspace" ]]; then
+    US_WORKSPACE="$HOME/.up-skill__workspace"   # global default: workspace lives under the user profile
+  elif [[ -z "${US_WORKSPACE:-}" ]]; then
     echo "error: no .up-skill__workspace found from '$start' (looked upward for up-skill__user-config.json)" >&2
     echo "  run inside your .up-skill__workspace, or set UP_SKILL_WORKSPACE=<path>" >&2
     exit 1

@@ -2,6 +2,11 @@
 
 A user is non-technical. After a one-time install they never see a command line or do any config.
 
+Setup is **global**, not per project, and is per tool. See:
+- `admin__setup__user__claude_code` - global in Claude Code (CLI / IDE / Code tab)
+- `admin__setup__user__claude_desktop_plugin` - global in the Claude Desktop Code tab
+- `admin__setup__user__codex` - global in OpenAI Codex (mechanism pending)
+
 ## The user contract
 
 | Touchpoint | What the user does | What happens |
