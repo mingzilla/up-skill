@@ -7,7 +7,7 @@
 #   or (one-line): powershell -c "irm https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__install.ps1 | iex"
 param(
   [string]$User,
-  [string]$Home,
+  [string]$Dir,
   [string]$AddressBook = "https://github.com/mingzilla/up-skill__address_book__sandbox.git",
   [string]$Core = "https://github.com/mingzilla/up-skill.git",
   [string]$Branch = "prod",
@@ -16,7 +16,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-if (-not $Home) { $Home = $env:USERPROFILE }
+if (-not $Dir) { $Dir = $env:USERPROFILE }
 if (-not $User) {
   if ([Console]::IsInputRedirected) { throw "error: -User is required" }
   $User = Read-Host "Your up-skill user name (as in the team address book)"
@@ -29,7 +29,7 @@ function Invoke-Git {
   if ($LASTEXITCODE -ne 0) { throw "git failed: git $GitArgs" }
 }
 
-$ws = Join-Path $Home ".up-skill__workspace"
+$ws = Join-Path $Dir ".up-skill__workspace"
 
 Write-Output "== up-skill install for '$User' =="
 Write-Output "workspace: $ws"
