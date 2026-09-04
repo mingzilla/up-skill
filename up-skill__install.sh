@@ -5,18 +5,25 @@
 # member's sharing repo, installs the up-skill__client skill, and writes the config. The user
 # never needs to look inside the workspace again - they just open Claude there.
 #
-# usage: up-skill__install.sh --user <name> [options]
-#   --user <name>         member name (must be in the address book)
+# usage: up-skill__install.sh [--user <name>] [options]
+#   --user <name>         member name (must be in the address book); prompted if omitted
 #   --home <dir>          parent of the workspace; workspace = <home>/up-skill__workspace
 #                         (default: $HOME - prompted interactively if on a terminal)
 #   --address-book <url|path>   address book repo (default: sandbox team)
 #   --core <url|path>     the up-skill project repo that ships up-skill__client
-#                         (default: https github; pass a local dir to use in-dev code)
+#                         (default: this repo when run from a clone; else https github)
 #   --reset               empty the workspace first, then rebuild from the definition
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# core = this repo when it ships the client (a clone has it right here); else fetch from github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/up-skill__address_book__sandbox.git"
-DEFAULT_CORE="https://github.com/mingzilla/up-skill.git"
+if [[ -d "$SCRIPT_DIR/.claude/skills/up-skill__client" ]]; then
+  DEFAULT_CORE="$SCRIPT_DIR"
+else
+  DEFAULT_CORE="https://github.com/mingzilla/up-skill.git"
+fi
 
 user=""
 home=""
@@ -35,20 +42,25 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-[[ -n "$user" ]] || { echo "error: --user <name> is required" >&2; exit 1; }
 command -v python3 >/dev/null 2>&1 || { echo "error: python3 is required" >&2; exit 1; }
 command -v git    >/dev/null 2>&1 || { echo "error: git is required" >&2; exit 1; }
 
-# prompt_default <question> <default> - non-interactive runs just use the default
+# prompt_default <question> <default> - non-interactive runs just use the default.
+# When run as `curl ... | bash`, stdin is the script - so prompts read from /dev/tty.
 prompt_default() {
-  local question="$1" default="$2" answer
+  local question="$1" default="$2" answer=""
   if [[ -t 0 && -t 1 ]]; then
     read -r -p "$question [$default]: " answer
-    echo "${answer:-$default}"
-  else
-    echo "$default"
+  elif [[ -e /dev/tty && -r /dev/tty && -w /dev/tty ]]; then
+    read -r -p "$question [$default]: " answer < /dev/tty
   fi
+  echo "${answer:-$default}"
 }
+
+if [[ -z "$user" ]]; then
+  user="$(prompt_default "Your up-skill user name (as in the team address book)" "${UP_SKILL_USER:-}")"
+fi
+[[ -n "$user" ]] || { echo "error: --user <name> is required (or set UP_SKILL_USER)" >&2; exit 1; }
 
 if [[ -z "$home" ]]; then
   home="$(prompt_default "Where should up-skill__workspace live?" "$HOME")"
