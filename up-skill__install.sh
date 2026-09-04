@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
-# up-skill__install.sh - set up a machine's .up-skill__workspace from a team definition.
+# up-skill__install.sh - build a machine's .up-skill__workspace from scratch.
 #
-# A user runs this once. It builds the workspace, clones the team address book and every
-# member's skills repo, installs the up-skill__client skill, and writes the config. The user
-# never needs to look inside the workspace again - they just open Claude there.
+# ALWAYS deletes and recreates the whole workspace, so a run never leaves stale or partial
+# state behind. It builds the workspace (address book + every member's skills repo + the
+# up-skill sharing skills + config). After install the user only talks to Claude.
 #
 # usage: up-skill__install.sh [--user <name>] [options]
 #   --user <name>         member name (must be in the address book); prompted if omitted
 #   --home <dir>          parent of the workspace; workspace = <home>/.up-skill__workspace
 #                         (default: $HOME - prompted interactively if on a terminal)
 #   --address-book <url|path>   address book repo (default: sandbox team)
-#   --core <url|path>     the up-skill project repo that ships up-skill__client
+#   --core <url|path>     the up-skill project repo that ships the sharing skills
 #                         (default: this repo when run from a clone; else https github)
-#   --reset               empty the workspace first, then rebuild from the definition
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run as `curl | bash`
 
-# core = this repo when it ships the client (a clone has it right here); else fetch from github
+# core = this repo when it ships the sharing skills (a clone has them right here); else fetch github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/up-skill__address_book__sandbox.git"
-if [[ -d "$SCRIPT_DIR/.claude/skills/up-skill__client" ]]; then
+if [[ -d "$SCRIPT_DIR/.claude/skills/up-skill__sharing__receive-skills" ]]; then
   DEFAULT_CORE="$SCRIPT_DIR"
 else
   DEFAULT_CORE="https://github.com/mingzilla/up-skill.git"
@@ -29,7 +28,6 @@ user=""
 home=""
 address_book="$DEFAULT_ADDRESS_BOOK"
 core="$DEFAULT_CORE"
-reset=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -37,7 +35,6 @@ while [[ $# -gt 0 ]]; do
     --home) home="${2:-}"; shift 2 ;;
     --address-book) address_book="${2:-}"; shift 2 ;;
     --core) core="${2:-}"; shift 2 ;;
-    --reset) reset=1; shift ;;
     *) echo "error: unknown option: $1" >&2; exit 1 ;;
   esac
 done
@@ -67,26 +64,6 @@ if [[ -z "$home" ]]; then
 fi
 ws="$home/.up-skill__workspace"
 
-# clone_or_pull <dir> <url-or-local-path> <label>
-clone_or_pull() {
-  local dir="$1" src="$2" label="$3"
-  if [[ -d "$dir/.git" ]]; then
-    if git -C "$dir" rev-parse --verify -q HEAD >/dev/null 2>&1; then
-      echo "  refresh $label: pull"
-      git -C "$dir" pull --ff-only --quiet
-    else
-      echo "  refresh $label: (empty clone, nothing to pull)"
-    fi
-  else
-    if [[ -e "$dir" ]]; then
-      echo "  remove stale '$label' ($dir) and re-clone"
-      rm -rf "$dir"
-    fi
-    echo "  clone $label"
-    git clone --quiet "$src" "$dir"
-  fi
-}
-
 # team dir from address book repo basename: up-skill__address_book__<team> -> team__<team>
 team_dir_for() {
   local base
@@ -98,14 +75,20 @@ team_dir_for() {
   esac
 }
 
+# clone <dir> <url-or-local-path> <label> - fresh clone into a dir that does not exist yet
+clone() {
+  local dir="$1" src="$2" label="$3"
+  echo "  clone $label"
+  git clone --quiet "$src" "$dir"
+}
+
 echo "== up-skill install for '$user' =="
 echo "workspace: $ws"
 
-if [[ "$reset" -eq 1 ]]; then
-  [[ "$(basename "$ws")" == ".up-skill__workspace" ]] || { echo "error: refusing to reset $ws" >&2; exit 1; }
-  echo "--reset: emptying $ws"
-  rm -rf "$ws"
-fi
+# always rebuild the whole workspace - never refresh, so no stale leftovers
+[[ "$(basename "$ws")" == ".up-skill__workspace" ]] || { echo "error: refusing to rebuild $ws" >&2; exit 1; }
+echo "rebuilding (deletes $ws)"
+rm -rf "$ws"
 mkdir -p "$ws"
 
 # 1. address book
@@ -114,7 +97,7 @@ team="$(team_dir_for "$address_book")"
 ab_dir="$ws/address_books/$team/$ab_basename"
 mkdir -p "$ws/address_books/$team"
 echo "-- address book ($team): $address_book"
-clone_or_pull "$ab_dir" "$address_book" "address book"
+clone "$ab_dir" "$address_book" "address book"
 
 ab_json="$ab_dir/address_book.json"
 [[ -f "$ab_json" ]] || { echo "error: no address_book.json in $ab_dir" >&2; exit 1; }
@@ -124,29 +107,29 @@ echo "-- member skills repos:"
 while IFS=$'\t' read -r m_name m_folder m_repo; do
   [[ -n "$m_folder" && -n "$m_repo" ]] || continue
   member_dir="$ws/address_books/$team/$m_folder"
-  clone_or_pull "$member_dir" "$m_repo" "skills repo of $m_name"
+  clone "$member_dir" "$m_repo" "skills repo of $m_name"
 done < <(python3 -c 'import json,sys
 ab = json.load(open(sys.argv[1]))
 for n, m in ab.get("users", {}).items():
     print(n + "\t" + m.get("folder", "") + "\t" + m.get("repo", ""))' "$ab_json")
 
-# 3. up-skill__client from the core (local path = in-dev copy; url = clone then copy)
-echo "-- installing up-skill__client:"
-client_src=""
-if [[ -d "$core/.claude/skills/up-skill__client" ]]; then
-  client_src="$core/.claude/skills/up-skill__client"          # core is a local dir
+# 3. operational sharing skills from the core: everything under .claude/skills
+#    (local dir = in-dev copy; url = clone then copy)
+echo "-- installing up-skill sharing skills:"
+skills_src=""
+if [[ -d "$core/.claude/skills" && -d "$core/.claude/skills/up-skill__sharing__receive-skills" ]]; then
+  skills_src="$core/.claude/skills"            # core is a local dir / clone that ships them
   echo "  core: local $core"
 else
   core_dir="$ws/up-skill__core"
-  clone_or_pull "$core_dir" "$core" "up-skill core"
-  client_src="$core_dir/.claude/skills/up-skill__client"
+  clone "$core_dir" "$core" "up-skill core"
+  skills_src="$core_dir/.claude/skills"
 fi
-[[ -d "$client_src" ]] || { echo "error: core has no .claude/skills/up-skill__client ($client_src)" >&2; exit 1; }
-client_dest="$ws/.claude/skills/up-skill__client"
-rm -rf "$client_dest"
+[[ -d "$skills_src/up-skill__sharing__receive-skills" ]] \
+  || { echo "error: core ships no up-skill sharing skills at $skills_src" >&2; exit 1; }
 mkdir -p "$ws/.claude/skills"
-cp -R "$client_src" "$client_dest"
-echo "  client installed at $client_dest"
+cp -R "$skills_src/." "$ws/.claude/skills/"
+echo "  skills installed at $ws/.claude/skills"
 
 # 4. config
 config="$ws/up-skill__user-config.json"
@@ -160,4 +143,4 @@ echo "  config written to $config"
 echo
 echo "== done =="
 echo "open Claude in: $ws"
-echo "then say: use up-skill to share / add / list skills"
+echo "then say: use up-skill to share (provide) or get/list skills (receive)"

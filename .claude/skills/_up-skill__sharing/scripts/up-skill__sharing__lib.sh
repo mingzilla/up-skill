@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# up-skill__client__lib.sh - shared helpers for the up-skill client scripts.
-# Sourced (never executed): `source .../up-skill__client__lib.sh`, then call `us_init`.
+# up-skill__sharing__lib.sh - shared helpers for the up-skill client scripts.
+# Sourced (never executed): `source .../up-skill__sharing__lib.sh`, then call `us_init`.
 #
 # Resolves the .up-skill__workspace (nearest ancestor holding up-skill__user-config.json,
 # or $UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* globals.

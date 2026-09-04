@@ -6,9 +6,9 @@ A user is non-technical. After a one-time install they never see a command line 
 
 | Touchpoint | What the user does | What happens |
 |---|---|---|
-| One-time install | run `up-skill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.up-skill__workspace`: clones the team address book + every member's sharing repo, installs `up-skill__client`, writes the config |
-| After install | open Claude **in** `.up-skill__workspace` | the `up-skill__client` skill is available |
-| Everyday | say "use up-skill to ..." | client offers: 1 list / 2 share / 3 add / 4 install |
+| One-time install | run `up-skill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.up-skill__workspace`: clones the team address book + every member's skills repo, installs `up-skill__sharing__provide-skills` + `up-skill__sharing__receive-skills`, writes the config |
+| After install | open Claude **in** `.up-skill__workspace` | the two up-skill sharing skills are available |
+| Everyday | say "use up-skill to ..." | Claude routes to provide (share) or receive (list / get / install) |
 
 The user never looks inside `.up-skill__workspace` and never touches git.
 

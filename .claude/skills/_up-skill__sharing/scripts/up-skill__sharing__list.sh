@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# up-skill__client__list.sh - list the skills each team member has shared (read-only).
+# up-skill__sharing__list.sh - list the skills each team member has shared (read-only).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=up-skill__client__lib.sh
-source "$SCRIPT_DIR/up-skill__client__lib.sh"
+# shellcheck source=up-skill__sharing__lib.sh
+source "$SCRIPT_DIR/up-skill__sharing__lib.sh"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"
 

@@ -71,6 +71,28 @@ what do we do?
 ### Default
 
 ```text
+  i think the problem is more related to how do we know where up-skill__admin_workspace is.
+  at set up time, something needs to keep the path. otherwise we can't find it.
+  if we can find it, then up-skill__admin_workspace/ and its up-skill__user-config.json
+  already have everything needed to derive the correct info
+  
+ it cannot be at a fixed path e.g. ~/.up-skill, think about
+  E:\code\harness__up-skill\up-skill__users\pc__leah\.up-skill__workspace
+
+  i don't have to use symlink. symblink does not work in windows so it's not a good
+  solution anyway.
+  we copy the skill to the desired location, and add a config file in the skill directory
+  to describe where the workspace is
+
+  this means,
+  whenever setting up a project or claude root, non-tech user will need some support.
+  this is because a new project does not know where the workspace is
+  a project that knows where the workspace is can pull the new version of the workspace and
+  resolve the rest
+
+```
+
+```text
 if someone in claude runs an  up-skill ... (i don't know what name to use yet maybe up-skill__client or up-skill__user), it should list options: 
 1) list available skills from our team address book, 
 2) share a skill, 

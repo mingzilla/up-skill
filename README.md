@@ -20,10 +20,11 @@ a one-way copy (the sharer's later renames/updates do not touch what you already
 
 - every member has their own skills repo (e.g. `up-skill__skills_repo__leah`)
 - a team **address book** maps each member name to their repo
-- the `up-skill__client` skill lists / shares / adds skills without touching git
+- two skills do the work, no git for the user: `up-skill__sharing__provide-skills` (share one of
+  yours) and `up-skill__sharing__receive-skills` (list / get / install)
 
 A machine is set up once by `up-skill__install.sh`, which builds a hidden `.up-skill__workspace`
-folder (the address book + each member's repo + the client skill) and writes
+folder (the address book + each member's repo + the two sharing skills) and writes
 `up-skill__user-config.json` inside it. After that the user only talks to Claude - they never see
 the folder again.
 
