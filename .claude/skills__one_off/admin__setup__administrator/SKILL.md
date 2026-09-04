@@ -46,3 +46,12 @@ The difference is, I make changes to e.g. address book, and a user pulls it.
 - [leah] - claude: "use up-skill to add myles' text-cleaner to claude desktop"
 - [leah] - her machine now has the text-cleaner skill to use
 ```
+
+### Default
+
+```text
+if someone in claude runs an  up-skill ... (i don't know what name to use yet maybe up-skill__client or up-skill__user), it should list options: 
+1) list available skills from our team address book, 
+2) share a skill, 
+3) add a skill from a team mate's shared skills
+```
