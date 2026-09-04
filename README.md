@@ -2,6 +2,10 @@
 
 Up skill non-tech people so that teams can make use of AI skills to improve their work experience.
 
+## To the Devs
+
+> Your skills are only useful if you can share it
+
 ## What this is
 
 A way for non-technical people to share Claude Code skills between teammates over github:
