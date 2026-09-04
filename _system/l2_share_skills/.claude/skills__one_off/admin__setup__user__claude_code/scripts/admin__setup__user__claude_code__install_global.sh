@@ -10,14 +10,14 @@ set -euo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel)"   # this script lives inside the up-skill repo
 SRC="$REPO_ROOT/_system/l2_share_skills/.claude/skills"
 
-for s in up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+for s in up-skill__menu up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
   [[ -d "$SRC/$s" ]] || { echo "error: source skill missing: $SRC/$s" >&2; exit 1; }
 done
 
 HOME_SKILLS="$HOME/.claude/skills"
 mkdir -p "$HOME_SKILLS"
 
-for s in up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+for s in up-skill__menu up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
   rm -rf "$HOME_SKILLS/$s"
   cp -R "$SRC/$s" "$HOME_SKILLS/$s"
 done
