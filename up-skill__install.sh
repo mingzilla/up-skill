@@ -2,16 +2,18 @@
 # up-skill__install.sh - build a machine's .up-skill__workspace from scratch.
 #
 # ALWAYS deletes and recreates the whole workspace, so a run never leaves stale or partial
-# state behind. It builds the workspace (address book + every member's skills repo + the
-# up-skill sharing skills + config). After install the user only talks to Claude.
+# state behind. The workspace holds: the up-skill repo (at --branch, default prod), the team
+# address book + every member's skills repo, the sharing skills (copied from the repo), config.
+# After install the user only talks to Claude.
 #
 # usage: up-skill__install.sh [--user <name>] [options]
 #   --user <name>         member name (must be in the address book); prompted if omitted
 #   --home <dir>          parent of the workspace; workspace = <home>/.up-skill__workspace
 #                         (default: $HOME - prompted interactively if on a terminal)
 #   --address-book <url|path>   address book repo (default: sandbox team)
-#   --core <url|path>     the up-skill project repo that ships the sharing skills
+#   --core <url|path>     the up-skill project repo (cloned into <ws>/up-skill)
 #                         (default: this repo when run from a clone; else https github)
+#   --branch <name>       which branch of the up-skill repo the workspace takes (default: prod)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run as `curl | bash`
@@ -28,6 +30,7 @@ user=""
 home=""
 address_book="$DEFAULT_ADDRESS_BOOK"
 core="$DEFAULT_CORE"
+branch="prod"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -35,6 +38,7 @@ while [[ $# -gt 0 ]]; do
     --home) home="${2:-}"; shift 2 ;;
     --address-book) address_book="${2:-}"; shift 2 ;;
     --core) core="${2:-}"; shift 2 ;;
+    --branch) branch="${2:-}"; shift 2 ;;
     *) echo "error: unknown option: $1" >&2; exit 1 ;;
   esac
 done
@@ -113,23 +117,22 @@ ab = json.load(open(sys.argv[1]))
 for n, m in ab.get("users", {}).items():
     print(n + "\t" + m.get("folder", "") + "\t" + m.get("repo", ""))' "$ab_json")
 
-# 3. operational sharing skills from the core: everything under .claude/skills
-#    (local dir = in-dev copy; url = clone then copy)
-echo "-- installing up-skill sharing skills:"
-skills_src=""
-if [[ -d "$core/.claude/skills" && -d "$core/.claude/skills/up-skill__sharing__receive-skills" ]]; then
-  skills_src="$core/.claude/skills"            # core is a local dir / clone that ships them
-  echo "  core: local $core"
-else
-  core_dir="$ws/up-skill__core"
-  clone "$core_dir" "$core" "up-skill core"
-  skills_src="$core_dir/.claude/skills"
+# 3. the up-skill repo into the workspace, then its sharing skills into .claude/skills
+echo "-- placing the up-skill repo ($branch):"
+if ! git ls-remote --heads "$core" "$branch" 2>/dev/null | grep -q .; then
+  echo "error: branch '$branch' not found in up-skill repo $core" >&2
+  echo "  create it (e.g. git push origin main:prod) or pass --branch <existing>" >&2
+  exit 1
 fi
+git clone --quiet -b "$branch" "$core" "$ws/up-skill"
+echo "  up-skill repo cloned at $ws/up-skill"
+
+skills_src="$ws/up-skill/.claude/skills"
 [[ -d "$skills_src/up-skill__sharing__receive-skills" ]] \
-  || { echo "error: core ships no up-skill sharing skills at $skills_src" >&2; exit 1; }
+  || { echo "error: branch '$branch' ships no up-skill sharing skills at $skills_src" >&2; exit 1; }
 mkdir -p "$ws/.claude/skills"
 cp -R "$skills_src/." "$ws/.claude/skills/"
-echo "  skills installed at $ws/.claude/skills"
+echo "  sharing skills installed at $ws/.claude/skills"
 
 # 4. config
 config="$ws/up-skill__user-config.json"
