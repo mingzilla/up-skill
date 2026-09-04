@@ -30,7 +30,7 @@
 
 ### The user journey for sharing
 
-As an administrator, my workspace is up-skill__admin_workspace, my address_books is exactly like any user's address book. 
+As an administrator, my workspace is up-skill__admin_workspace, my address_books is exactly like any user's address book.
 The difference is, I make changes to e.g. address book, and a user pulls it.
 
 ```text
@@ -45,6 +45,27 @@ The difference is, I make changes to e.g. address book, and a user pulls it.
 - [ming] - to leah: "leah, open claude and say `use up-skill to add myles' text-cleaner to claude desktop`"
 - [leah] - claude: "use up-skill to add myles' text-cleaner to claude desktop"
 - [leah] - her machine now has the text-cleaner skill to use
+```
+
+### Admin sharing skill
+
+```text
+  i'll need to think about how to share skills after we do this
+  we need to allow registering a few places for skill lookup
+  you should be able to share global skills and project skills
+  also, an up-skill skill (i still have not decided the name) should be added or symblinked
+  into e.g. a claude code launch directory, e.g.,
+  _teamwork_system/.claude/skills__up-skill should symblink to somewhere, so that i can say
+  use up-skill to share the coding__general skill
+  what would you suggest?
+```
+
+### User sharing skill
+
+what do we do?
+
+```text
+
 ```
 
 ### Default
