@@ -12,8 +12,8 @@
     │       ├── address_books
     │       │   └── team__sandbox       # each dir inside is a git repo connects to github
     │       │       ├── up-skill__address_book__sandbox/address_book.json  # allows discovery to maintain this list - currently has real repos
-    │       │       ├── up-skill__sharing__leah          # synced with address book definition
-    │       │       └── up-skill__sharing__myles         # synced with address book definition
+    │       │       ├── up-skill__skills_repo__leah          # synced with address book definition
+    │       │       └── up-skill__skills_repo__myles         # synced with address book definition
     │       └── up-skill__user-config.json   # defines e.g. which address book to use
     └── pc__myles
 ```
@@ -41,7 +41,7 @@ The difference is, I make changes to e.g. address book, and a user pulls it.
 - [myles] - runs up-skill__install.sh under ming's technical guiding
 - [ming] - "myles, open claude and say `can you use up-skill to share the text-cleaner skill`"
 - [myles] - claude: "can you use up-skill to share the text-cleaner skill"
-- [up-skill] - copy skill to up-skill__sharing__myles -> commit "share text-cleaner" -> push
+- [up-skill] - copy skill to up-skill__skills_repo__myles -> commit "share text-cleaner" -> push
 - [ming] - to leah: "leah, open claude and say `use up-skill to add myles' text-cleaner to claude desktop`"
 - [leah] - claude: "use up-skill to add myles' text-cleaner to claude desktop"
 - [leah] - her machine now has the text-cleaner skill to use
