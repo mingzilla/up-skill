@@ -54,4 +54,13 @@ if someone in claude runs an  up-skill ... (i don't know what name to use yet ma
 1) list available skills from our team address book, 
 2) share a skill, 
 3) add a skill from a team mate's shared skills
+
+ - What should install.sh target for now?
+   → let's get wsl to work for now. i will give this to windows user that have no wsl, but
+   we can make a mirror ps1 installation script later
+ - Where must Claude find the client skill after install, so the user can run 'use
+   up-skill ...' from any project?
+   → for easiness, you and myles will just use up-skill__workspace for now. once we prove
+   that everything works, i will need to: 1) run one script using ps1, 2) use my windows
+   claude desktop to get a skill from myles
 ```
