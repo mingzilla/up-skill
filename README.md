@@ -4,7 +4,15 @@ Up skill non-tech people so that teams can make use of AI skills to improve thei
 
 ## What this is
 
-A way to share Claude Code skills between teammates over github:
+A way for non-technical people to share Claude Code skills between teammates over github:
+
+- sharer: *"share this skill"* - Claude uploads it to your sharing repo
+- receiver: *"get the xxx skill myles shared"* - Claude pulls it into your project
+
+The sharing repo is transport only - each member curates their own shelf, and receiving a skill is
+a one-way copy (the sharer's later renames/updates do not touch what you already have).
+
+> Curating a high-quality team skill *library* is a different task and is out of scope here.
 
 - every member has their own skills repo (e.g. `up-skill__sharing__leah`)
 - a team **address book** maps each member name to their repo
