@@ -2,7 +2,7 @@
 # up-skill__client__lib.sh - shared helpers for the up-skill client scripts.
 # Sourced (never executed): `source .../up-skill__client__lib.sh`, then call `us_init`.
 #
-# Resolves the up-skill__workspace (nearest ancestor holding up-skill__user-config.json,
+# Resolves the .up-skill__workspace (nearest ancestor holding up-skill__user-config.json,
 # or $UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* globals.
 
 set -euo pipefail
@@ -97,8 +97,8 @@ us_init() {
   if [[ -n "${UP_SKILL_WORKSPACE:-}" && -d "$UP_SKILL_WORKSPACE" ]]; then
     US_WORKSPACE="$UP_SKILL_WORKSPACE"
   elif ! us_locate_workspace "$start"; then
-    echo "error: no up-skill__workspace found from '$start' (looked upward for up-skill__user-config.json)" >&2
-    echo "  run inside your up-skill__workspace, or set UP_SKILL_WORKSPACE=<path>" >&2
+    echo "error: no .up-skill__workspace found from '$start' (looked upward for up-skill__user-config.json)" >&2
+    echo "  run inside your .up-skill__workspace, or set UP_SKILL_WORKSPACE=<path>" >&2
     exit 1
   fi
   us_load_config || { echo "error: cannot read config in $US_WORKSPACE" >&2; exit 1; }

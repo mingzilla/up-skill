@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# up-skill__install.sh - set up a machine's up-skill__workspace from a team definition.
+# up-skill__install.sh - set up a machine's .up-skill__workspace from a team definition.
 #
 # A user runs this once. It builds the workspace, clones the team address book and every
 # member's sharing repo, installs the up-skill__client skill, and writes the config. The user
@@ -7,7 +7,7 @@
 #
 # usage: up-skill__install.sh [--user <name>] [options]
 #   --user <name>         member name (must be in the address book); prompted if omitted
-#   --home <dir>          parent of the workspace; workspace = <home>/up-skill__workspace
+#   --home <dir>          parent of the workspace; workspace = <home>/.up-skill__workspace
 #                         (default: $HOME - prompted interactively if on a terminal)
 #   --address-book <url|path>   address book repo (default: sandbox team)
 #   --core <url|path>     the up-skill project repo that ships up-skill__client
@@ -15,7 +15,7 @@
 #   --reset               empty the workspace first, then rebuild from the definition
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run as `curl | bash`
 
 # core = this repo when it ships the client (a clone has it right here); else fetch from github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/up-skill__address_book__sandbox.git"
@@ -63,9 +63,9 @@ fi
 [[ -n "$user" ]] || { echo "error: --user <name> is required (or set UP_SKILL_USER)" >&2; exit 1; }
 
 if [[ -z "$home" ]]; then
-  home="$(prompt_default "Where should up-skill__workspace live?" "$HOME")"
+  home="$(prompt_default "Where should the up-skill workspace live? (a hidden .up-skill__workspace folder)" "$HOME")"
 fi
-ws="$home/up-skill__workspace"
+ws="$home/.up-skill__workspace"
 
 # clone_or_pull <dir> <url-or-local-path> <label>
 clone_or_pull() {
@@ -102,7 +102,7 @@ echo "== up-skill install for '$user' =="
 echo "workspace: $ws"
 
 if [[ "$reset" -eq 1 ]]; then
-  [[ "$(basename "$ws")" == "up-skill__workspace" ]] || { echo "error: refusing to reset $ws" >&2; exit 1; }
+  [[ "$(basename "$ws")" == ".up-skill__workspace" ]] || { echo "error: refusing to reset $ws" >&2; exit 1; }
   echo "--reset: emptying $ws"
   rm -rf "$ws"
 fi

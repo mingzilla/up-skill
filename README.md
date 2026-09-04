@@ -10,9 +10,10 @@ A way to share Claude Code skills between teammates over github:
 - a team **address book** maps each member name to their repo
 - the `up-skill__client` skill lists / shares / adds skills without touching git
 
-A machine is set up once by `up-skill__install.sh`, which builds an `up-skill__workspace`
-(the address book + each member's repo + the client skill) and writes `up-skill__user-config.json`.
-After that the user only talks to Claude.
+A machine is set up once by `up-skill__install.sh`, which builds a hidden `.up-skill__workspace`
+folder (the address book + each member's repo + the client skill) and writes
+`up-skill__user-config.json` inside it. After that the user only talks to Claude - they never see
+the folder again.
 
 ## Prerequisites (Linux / WSL)
 
@@ -32,7 +33,7 @@ The installer asks two things and does the rest:
 | Prompt | Meaning |
 |---|---|
 | Your up-skill user name | the name you are listed under in the team address book, e.g. `myles` |
-| Where should up-skill__workspace live? | defaults to your home folder |
+| Where should the up-skill workspace live? | a folder on your machine; `.up-skill__workspace` is created inside it (default: your home) |
 
 For an unattended run, pass the answers instead:
 
@@ -47,7 +48,7 @@ curl -fsSL https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__i
 
 ## Use it
 
-Open Claude **in** `up-skill__workspace` and say:
+Open Claude **in** the `.up-skill__workspace` folder (it is a normal Claude project) and say:
 
 > use up-skill to ...
 

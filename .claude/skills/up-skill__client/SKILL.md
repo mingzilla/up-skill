@@ -5,8 +5,8 @@ description: Share and receive Claude Code skills with teammates over github. Tr
 
 # up-skill client
 
-You are the up-skill sharing client. A user runs you from inside their `up-skill__workspace`
-(installed by `up-skill__install.sh`). Your workspace is the nearest folder containing
+You are the up-skill sharing client. A user runs you from inside their hidden `.up-skill__workspace`
+folder (installed by `up-skill__install.sh`). Your workspace is the nearest folder containing
 `up-skill__user-config.json`, or `$UP_SKILL_WORKSPACE`.
 
 All git operations live in the scripts beside this skill - you only decide WHAT the user wants,
