@@ -106,6 +106,11 @@ received from whichever surfaces are set up.
 
 - The one-line installer above builds the workspace and installs the **global Claude Code** skills
   automatically. Use `--skip-global` to skip that.
+- **Windows**: run the PowerShell mirror (same layout under `%USERPROFILE%`):
+
+  ```powershell
+  powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__install.ps1 | iex"
+  ```
 - **Claude Desktop** (Windows): install the plugin - see the one-off setup skill
   `_system/l2_share_skills/.claude/skills__one_off/admin__setup__user__claude_desktop_plugin`.
 - **Codex**: not yet supported (mechanism under research).
@@ -116,9 +121,15 @@ received from whichever surfaces are set up.
 curl -fsSL https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__uninstall.sh | bash
 ```
 
+On Windows:
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__uninstall.ps1 | iex"
+```
+
 Removes the global skills and the workspace; never touches your github repos or projects. If you
 installed the Claude Desktop plugin, remove it in the app's plugin manager.
 
 ## Status
 
-Prototype, sandbox team. Windows / Claude-Desktop users: a `ps1` mirror of the installer is planned.
+Prototype, sandbox team. Windows uses the PowerShell mirror (`up-skill__install.ps1`).
