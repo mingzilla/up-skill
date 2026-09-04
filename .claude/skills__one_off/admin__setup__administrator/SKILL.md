@@ -1,19 +1,21 @@
 ## Structure
 
 ```text
-|-- up-skill
-|   +-- _system
-|
-|-- up-skill__users
-|   |-- pc__leah                        # this is leah's machine
-|   |   |-- projects
-|   |   |   +-- leah_local_project
-|   |   |
-|   |   +-- up-skill__workspace
-|   |   |   +-- up-skill__sharing
-|   |   +-- up-skill__user-config.json  # defines which address book to use
-|   |
-|   +-- pc__myles
+├── up-skill
+│   ├── README.md
+│   └── _system
+└── up-skill__users
+    ├── pc__leah                        # this is leah's machine
+    │   ├── projects                    # leah's local projects
+    │   │   └── leah_local_project
+    │   └── up-skill__workspace
+    │       ├── address_books
+    │       │   └── team__sandbox       # each dir inside is a git repo connects to github
+    │       │       ├── up-skill__address_book__sandbox  # allows discovery to maintain this list
+    │       │       ├── up-skill__sharing__leah          # synced with address book definition
+    │       │       └── up-skill__sharing__myles         # synced with address book definition
+    │       └── up-skill__user-config.json   # defines e.g. which address book to use
+    └── pc__myles
 ```
 
 ## Relationships
