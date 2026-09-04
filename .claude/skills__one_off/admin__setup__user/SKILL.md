@@ -8,7 +8,7 @@ A user is non-technical. After a one-time install they never see a command line 
 |---|---|---|
 | One-time install | run `up-skill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.up-skill__workspace`: clones the team address book + every member's sharing repo, installs `up-skill__client`, writes the config |
 | After install | open Claude **in** `.up-skill__workspace` | the `up-skill__client` skill is available |
-| Everyday | say "use up-skill to ..." | client offers: 1 list / 2 share / 3 add |
+| Everyday | say "use up-skill to ..." | client offers: 1 list / 2 share / 3 add / 4 install |
 
 The user never looks inside `.up-skill__workspace` and never touches git.
 

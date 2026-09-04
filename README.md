@@ -52,7 +52,7 @@ Open Claude **in** the `.up-skill__workspace` folder (it is a normal Claude proj
 
 > use up-skill to ...
 
-Claude offers the three verbs:
+Claude offers these verbs:
 
 | Verb | Example |
 |---|---|
