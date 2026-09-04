@@ -93,6 +93,31 @@ This section is a direct instruction to Claude Code. If a user asks you to
 
 Do not improvise other commands - the installer owns the workspace layout.
 
+## Install targets
+
+The installer runs everywhere and installs what applies to this machine. Skills are shared and
+received from whichever surfaces are set up.
+
+| OS | Claude Code (global) | Claude Desktop | Codex |
+|---|---|---|---|
+| Linux / macOS / WSL | installed by the installer (skills in `~/.claude/skills`) | n/a here | pending |
+| Windows | installed by the installer | via the up-skill plugin (marketplace) | pending |
+
+- The one-line installer above builds the workspace and installs the **global Claude Code** skills
+  automatically. Use `--skip-global` to skip that.
+- **Claude Desktop** (Windows): install the plugin - see the one-off setup skill
+  `_system/l2_share_skills/.claude/skills__one_off/admin__setup__user__claude_desktop_plugin`.
+- **Codex**: not yet supported (mechanism under research).
+
+## Uninstall
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__uninstall.sh | bash
+```
+
+Removes the global skills and the workspace; never touches your github repos or projects. If you
+installed the Claude Desktop plugin, remove it in the app's plugin manager.
+
 ## Status
 
 Prototype, sandbox team. Windows / Claude-Desktop users: a `ps1` mirror of the installer is planned.

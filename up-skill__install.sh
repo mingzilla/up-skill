@@ -31,6 +31,7 @@ home=""
 address_book="$DEFAULT_ADDRESS_BOOK"
 core="$DEFAULT_CORE"
 branch="prod"
+install_global=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -39,6 +40,7 @@ while [[ $# -gt 0 ]]; do
     --address-book) address_book="${2:-}"; shift 2 ;;
     --core) core="${2:-}"; shift 2 ;;
     --branch) branch="${2:-}"; shift 2 ;;
+    --skip-global) install_global=0; shift ;;
     *) echo "error: unknown option: $1" >&2; exit 1 ;;
   esac
 done
@@ -142,6 +144,23 @@ with open(sys.argv[4], "w") as f:
     json.dump(cfg, f, indent=2)
     f.write("\n")' "$user" "$team" "./address_books/$team/$ab_basename" "$config"
 echo "  config written to $config"
+
+# 5. global Claude Code install: copy the sharing skills into ~/.claude/skills so they are
+#    available in every local session, not just inside this workspace.
+if [[ "$install_global" -eq 1 ]]; then
+  gsrc="$ws/up-skill/_system/l2_share_skills/.claude/skills"
+  gh="$HOME/.claude/skills"
+  if [[ -d "$gsrc/up-skill__sharing__receive-skills" ]]; then
+    mkdir -p "$gh"
+    for s in up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+      rm -rf "$gh/$s"
+      cp -R "$gsrc/$s" "$gh/$s"
+    done
+    echo "  global skills installed at $gh (every Claude Code session)"
+  else
+    echo "  warning: global skills source missing at $gsrc - skipped" >&2
+  fi
+fi
 
 echo
 echo "== done =="
