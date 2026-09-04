@@ -11,7 +11,7 @@
     │   └── up-skill__workspace
     │       ├── address_books
     │       │   └── team__sandbox       # each dir inside is a git repo connects to github
-    │       │       ├── up-skill__address_book__sandbox  # allows discovery to maintain this list
+    │       │       ├── up-skill__address_book__sandbox/address_book.json  # allows discovery to maintain this list - currently has real repos
     │       │       ├── up-skill__sharing__leah          # synced with address book definition
     │       │       └── up-skill__sharing__myles         # synced with address book definition
     │       └── up-skill__user-config.json   # defines e.g. which address book to use
