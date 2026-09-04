@@ -13,7 +13,7 @@ US_TEAM=""            # e.g. team__sandbox
 US_ADDRESS_BOOK=""    # dir of the cloned address-book repo
 US_AB_JSON=""         # path to address_book.json
 US_TEAM_DIR=""        # dir holding the address book + every member's sharing clone
-US_ME_FOLDER=""       # my sharing clone folder name, e.g. up-skill__sharing__leah
+US_ME_FOLDER=""       # my skills-repo clone folder name, e.g. up-skill__skills_repo__leah
 US_ME_DIR=""          # absolute path of my sharing clone
 
 us_require() {

@@ -18,7 +18,7 @@ a one-way copy (the sharer's later renames/updates do not touch what you already
 
 > Curating a high-quality team skill *library* is a different task and is out of scope here.
 
-- every member has their own skills repo (e.g. `up-skill__sharing__leah`)
+- every member has their own skills repo (e.g. `up-skill__skills_repo__leah`)
 - a team **address book** maps each member name to their repo
 - the `up-skill__client` skill lists / shares / adds skills without touching git
 
@@ -32,7 +32,7 @@ the folder again.
 - `git`
 - `python3`
 - Claude Code
-- access to this repo and the team's `up-skill__sharing__*` repos
+- access to this repo and the team's `up-skill__skills_repo__*` repos
 
 ## Linux set up - one time
 

@@ -2,7 +2,7 @@
 # up-skill__install.sh - set up a machine's .up-skill__workspace from a team definition.
 #
 # A user runs this once. It builds the workspace, clones the team address book and every
-# member's sharing repo, installs the up-skill__client skill, and writes the config. The user
+# member's skills repo, installs the up-skill__client skill, and writes the config. The user
 # never needs to look inside the workspace again - they just open Claude there.
 #
 # usage: up-skill__install.sh [--user <name>] [options]
@@ -119,12 +119,12 @@ clone_or_pull "$ab_dir" "$address_book" "address book"
 ab_json="$ab_dir/address_book.json"
 [[ -f "$ab_json" ]] || { echo "error: no address_book.json in $ab_dir" >&2; exit 1; }
 
-# 2. every member's sharing repo (address book is the definition)
-echo "-- member sharing repos:"
+# 2. every member's skills repo (address book is the definition)
+echo "-- member skills repos:"
 while IFS=$'\t' read -r m_name m_folder m_repo; do
   [[ -n "$m_folder" && -n "$m_repo" ]] || continue
   member_dir="$ws/address_books/$team/$m_folder"
-  clone_or_pull "$member_dir" "$m_repo" "sharing repo of $m_name"
+  clone_or_pull "$member_dir" "$m_repo" "skills repo of $m_name"
 done < <(python3 -c 'import json,sys
 ab = json.load(open(sys.argv[1]))
 for n, m in ab.get("users", {}).items():

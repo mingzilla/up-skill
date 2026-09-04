@@ -11,7 +11,7 @@ other team members pull from it.
 
 1. Open https://github.com and sign in with their account.
 2. Click "+" (top right) -> **New repository**.
-3. Repository name: `up-skill__sharing__<yourname>` (lowercase, no spaces), e.g. `up-skill__sharing__myles`.
+3. Repository name: `up-skill__skills_repo__<yourname>` (lowercase, no spaces), e.g. `up-skill__skills_repo__myles`.
 4. Visibility:
    - **Public** - anyone can read it. Simplest.
    - **Private** - use this when skills must stay inside the team; the member must then add the
@@ -28,7 +28,7 @@ Add the member to the team address book. In `address_book.json`, under `users`, 
 
 ```json
 "<membername>": {
-  "folder": "up-skill__sharing__<membername>",
+  "folder": "up-skill__skills_repo__<membername>",
   "repo": "<the URL the member sent>"
 }
 ```

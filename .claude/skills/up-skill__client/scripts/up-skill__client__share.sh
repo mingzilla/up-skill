@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# up-skill__client__share.sh - copy a local skill folder into my sharing repo and push it.
+# up-skill__client__share.sh - copy a local skill folder into my skills repo and push it.
 # usage: up-skill__client__share.sh <skill-folder|skill-name> [message]
 set -euo pipefail
 
@@ -32,7 +32,7 @@ name="$(basename "$src")"
 us_safe_name "$name"
 
 if [[ ! -d "$US_ME_DIR/.git" ]]; then
-  echo "error: your sharing repo is missing: $US_ME_DIR (run install.sh first)" >&2
+  echo "error: your skills repo is missing: $US_ME_DIR (run install.sh first)" >&2
   exit 1
 fi
 
