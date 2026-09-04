@@ -15,7 +15,7 @@ Ask the user which skill if it is unclear, and for an optional short message. Th
 **do not improvise git**:
 
 ```bash
-bash .claude/skills/_up-skill__sharing/scripts/up-skill__sharing__share.sh "<skill>" "<message>"
+bash .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.sh "<skill>" "<message>"
 ```
 
 Run from the up-skill workspace. If the script reports a missing skills repo, tell the user to run

@@ -7,7 +7,8 @@ description: Bring skills in - inbound. Triggered by "get <owner>'s <skill>", "a
 
 Bring teammates' shared skills into this machine, and see what is available.
 
-Scripts live at `.claude/skills/_up-skill__sharing/scripts/` (run from the up-skill workspace).
+This skill is self-contained: its scripts live in its own `scripts/` folder
+(`.claude/skills/up-skill__sharing__receive-skills/scripts/`, run from the up-skill workspace).
 
 ## Verbs
 
@@ -17,7 +18,7 @@ Scripts live at `.claude/skills/_up-skill__sharing/scripts/` (run from the up-sk
 | add | "get myles' `xxx`", "put leah's `xxx` into my site project" | `up-skill__sharing__add.sh "<owner>" "<skill>" "<target-dir>"` |
 | install | "install `https://github.com/...` into this project" | `up-skill__sharing__install.sh "<url>" ["<target-dir>"]` |
 
-Full path: `bash .claude/skills/_up-skill__sharing/scripts/<script> <args>`.
+Full path: `bash .claude/skills/up-skill__sharing__receive-skills/scripts/<script> <args>`.
 
 Resolution rules:
 - `list` - no args; shows each member and their shared skills.
