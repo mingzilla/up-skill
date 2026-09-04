@@ -28,7 +28,7 @@
 
 ## Workflows
 
-### Admin - Add a user to the team's address book
+### The user journey for sharing
 
 As an administrator, my workspace is up-skill__admin_workspace, my address_books is exactly like any user's address book. 
 The difference is, I make changes to e.g. address book, and a user pulls it.
@@ -43,6 +43,6 @@ The difference is, I make changes to e.g. address book, and a user pulls it.
 - [myles] - claude: "can you use up-skill to share the text-cleaner skill"
 - [up-skill] - copy skill to up-skill__sharing__myles -> commit "share text-cleaner" -> push
 - [ming] - to leah: "leah, open claude and say `use up-skill to add myles' text-cleaner to claude desktop`"
+- [leah] - claude: "use up-skill to add myles' text-cleaner to claude desktop"
+- [leah] - her machine now has the text-cleaner skill to use
 ```
-
-### Sharing
