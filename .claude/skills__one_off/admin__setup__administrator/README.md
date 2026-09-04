@@ -85,3 +85,14 @@ if someone in claude runs an  up-skill ... (i don't know what name to use yet ma
    that everything works, i will need to: 1) run one script using ps1, 2) use my windows
    claude desktop to get a skill from myles
 ```
+
+### Feature Updates
+
+```text
+- [leah] - "ming, can we make sure we display user skills in a table"
+- [ming] - "no problem, wait"
+- [ming] - update up-skill core solution
+- [ming] - to leah "leah, give it a go"
+- [leah] - to claude "use up-skill to show me users and skills" (and since up-skill__sharing__receive-skills pulls from the repo first to update itself)
+- [claude] - shows result in expected format
+```
