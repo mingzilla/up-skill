@@ -20,7 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run a
 
 # core = this repo when it ships the sharing skills (a clone has them right here); else fetch github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/up-skill__address_book__sandbox.git"
-if [[ -d "$SCRIPT_DIR/.claude/skills/up-skill__sharing__receive-skills" ]]; then
+if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/up-skill__sharing__receive-skills" ]]; then
   DEFAULT_CORE="$SCRIPT_DIR"
 else
   DEFAULT_CORE="https://github.com/mingzilla/up-skill.git"
@@ -127,7 +127,7 @@ fi
 git clone --quiet -b "$branch" "$core" "$ws/up-skill"
 echo "  up-skill repo cloned at $ws/up-skill"
 
-skills_src="$ws/up-skill/.claude/skills"
+skills_src="$ws/up-skill/_system/l2_share_skills/.claude/skills"
 [[ -d "$skills_src/up-skill__sharing__receive-skills" ]] \
   || { echo "error: branch '$branch' ships no up-skill sharing skills at $skills_src" >&2; exit 1; }
 mkdir -p "$ws/.claude/skills"

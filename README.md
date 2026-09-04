@@ -4,7 +4,7 @@ Up skill non-tech people so that teams can make use of AI skills to improve thei
 
 ## To the Devs
 
-> Your skills are only useful if you can share it
+> Your skill is only useful if you can share it
 
 ## What this is
 

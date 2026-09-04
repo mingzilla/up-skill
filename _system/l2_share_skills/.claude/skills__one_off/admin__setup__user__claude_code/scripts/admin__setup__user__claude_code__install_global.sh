@@ -3,13 +3,15 @@
 # Claude Code skills, so provide/receive are available in every local session - not per project.
 #
 # The workspace stays at ~/.up-skill__workspace; the skills resolve it by default.
-# Usage: run this after the up-skill workspace exists. Re-run to refresh the skills.
+# Source skills are copied from this repo's l2 bundle
+# (_system/l2_share_skills/.claude/skills). Run after the workspace exists; re-run to refresh.
 set -euo pipefail
 
-cd "$(dirname "$0")/../../../.."   # repo root (this script lives in .claude/skills__one_off/<skill>/scripts/)
+REPO_ROOT="$(git rev-parse --show-toplevel)"   # this script lives inside the up-skill repo
+SRC="$REPO_ROOT/_system/l2_share_skills/.claude/skills"
 
 for s in up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
-  [[ -d ".claude/skills/$s" ]] || { echo "error: source skill missing: .claude/skills/$s" >&2; exit 1; }
+  [[ -d "$SRC/$s" ]] || { echo "error: source skill missing: $SRC/$s" >&2; exit 1; }
 done
 
 HOME_SKILLS="$HOME/.claude/skills"
@@ -17,7 +19,7 @@ mkdir -p "$HOME_SKILLS"
 
 for s in up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
   rm -rf "$HOME_SKILLS/$s"
-  cp -R ".claude/skills/$s" "$HOME_SKILLS/$s"
+  cp -R "$SRC/$s" "$HOME_SKILLS/$s"
 done
 
 echo "installed global up-skill skills into: $HOME_SKILLS"
