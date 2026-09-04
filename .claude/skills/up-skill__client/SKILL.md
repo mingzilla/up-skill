@@ -1,6 +1,6 @@
 ---
 name: up-skill__client
-description: Share and receive Claude Code skills with teammates over github. Triggered by "use up-skill", "share my skill", "put <owner>'s <skill> into <project>", "what skills does my team have".
+description: Share, receive and install Claude Code skills with teammates over github. Triggered by "use up-skill", "share my skill", "put <owner>'s <skill> into <project>", "install <github-url>", "what skills does my team have".
 ---
 
 # up-skill client
@@ -21,6 +21,7 @@ When the user says "use up-skill ...", map their intent to one verb and run the 
 | 1 | **list** | "what skills does the team have" | `up-skill__client__list.sh` |
 | 2 | **share** | "share my `<skill>`" | `up-skill__client__share.sh <skill>` |
 | 3 | **add** | "put `<owner>`'s `<skill>` into `<project>`" | `up-skill__client__add.sh <owner> <skill> <project-dir>` |
+| 4 | **install** | "install `<github-url>` into `<project>`" | `up-skill__client__install.sh <url> [project-dir]` |
 
 If the intent is unclear, ask which of the three they want before running anything.
 
@@ -48,6 +49,18 @@ Resolve the three arguments:
 
 Run `up-skill__client__add.sh "<owner>" "<skill>" "<project-dir>"`. The skill lands in
 `<project-dir>/.claude/skills/<skill>/` and is ready when the user opens Claude in that project.
+
+### install
+Bring skills straight from any github repo into a project - no address book needed.
+Resolve:
+- `<url>` - `https://github.com/<owner>/<repo>` (or `owner/repo`). The repo may be a whole Claude
+  project (skills under its `.claude/skills/`) or skills at its root.
+- `<project-dir>` - where the skills should land (default: the current project). If the user does
+  not say, ask - do not guess a path.
+
+Run `up-skill__client__install.sh "<url>" "<project-dir>"`. It clones the repo, copies each skill
+into `<project-dir>/.claude/skills/<skill>/`, and prints what it installed. Installing
+`https://github.com/mingzilla/up-skill` itself brings in this `up-skill__client` skill.
 
 ## After every verb
 

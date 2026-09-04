@@ -59,6 +59,26 @@ Claude offers the three verbs:
 | list | what skills does the team have |
 | share | share my `my_nice_skill` |
 | add | put `leah`'s `my_nice_skill` into my website project |
+| install | install `https://github.com/mingzilla/up-skill` into this project |
+
+## For Claude: how to install on a new machine
+
+This section is a direct instruction to Claude Code. If a user asks you to
+"install https://github.com/mingzilla/up-skill" (or any up-skill repo), do exactly this:
+
+1. Check the machine has `git` and `python3`.
+2. Ask the user for their up-skill user name (the name they are listed under in the team address book).
+3. Run the installer with those params:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/mingzilla/up-skill/main/up-skill__install.sh \
+     | bash -s -- --user "<their name>" --home "$HOME"
+   ```
+
+4. Confirm it finished, then tell the user:
+   "Open Claude in `$HOME/.up-skill__workspace` and say `use up-skill to ...`."
+
+Do not improvise other commands - the installer owns the workspace layout.
 
 ## Status
 
