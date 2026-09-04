@@ -1,0 +1,1 @@
+A user is non-technical, once initially set up with a one line command, they should never ever see or use command line or do any config.
