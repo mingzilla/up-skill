@@ -23,10 +23,11 @@ a one-way copy (the sharer's later renames/updates do not touch what you already
 - two skills do the work, no git for the user: `up-skill__sharing__provide-skills` (share one of
   yours) and `up-skill__sharing__receive-skills` (list / get / install)
 
-A machine is set up once by `up-skill__install.sh`, which builds a hidden `.up-skill__workspace`
-folder (the address book + each member's repo + the two sharing skills) and writes
-`up-skill__user-config.json` inside it. After that the user only talks to Claude - they never see
-the folder again.
+A machine is set up once by `up-skill__install.sh`: it builds a hidden `.up-skill__workspace`
+folder (team data: the address book + each member's skills repo + the up-skill repo) and writes
+`up-skill__user-config.json` inside it, then installs the two sharing skills **globally** in
+`~/.claude/skills` so they work in every Claude Code session. After that the user only talks to
+Claude - they never see the workspace folder again.
 
 ## Prerequisites (Linux / WSL)
 

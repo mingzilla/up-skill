@@ -119,7 +119,7 @@ ab = json.load(open(sys.argv[1]))
 for n, m in ab.get("users", {}).items():
     print(n + "\t" + m.get("folder", "") + "\t" + m.get("repo", ""))' "$ab_json")
 
-# 3. the up-skill repo into the workspace, then its sharing skills into .claude/skills
+# 3. the up-skill repo into the workspace (data anchor - its skills feed the global install)
 echo "-- placing the up-skill repo ($branch):"
 if ! git ls-remote --heads "$core" "$branch" 2>/dev/null | grep -q .; then
   echo "error: branch '$branch' not found in up-skill repo $core" >&2
@@ -129,12 +129,9 @@ fi
 git clone --quiet -b "$branch" "$core" "$ws/up-skill"
 echo "  up-skill repo cloned at $ws/up-skill"
 
-skills_src="$ws/up-skill/_system/l2_share_skills/.claude/skills"
-[[ -d "$skills_src/up-skill__sharing__receive-skills" ]] \
-  || { echo "error: branch '$branch' ships no up-skill sharing skills at $skills_src" >&2; exit 1; }
-mkdir -p "$ws/.claude/skills"
-cp -R "$skills_src/." "$ws/.claude/skills/"
-echo "  sharing skills installed at $ws/.claude/skills"
+gskills="$ws/up-skill/_system/l2_share_skills/.claude/skills"
+[[ -d "$gskills/up-skill__sharing__receive-skills" ]] \
+  || { echo "error: branch '$branch' ships no up-skill sharing skills at $gskills" >&2; exit 1; }
 
 # 4. config
 config="$ws/up-skill__user-config.json"
