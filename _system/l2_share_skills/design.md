@@ -37,7 +37,7 @@ mingzilla/up-skill                       the solution repo
         ├── design.md
         └── .claude/
             ├── skills/
-            │   ├── up-skill__menu/                  numbered options -> delegate
+            │   ├── upskill/                  numbered options -> delegate
             │   ├── up-skill__sharing__provide-skills/   share (self-contained)
             │   └── up-skill__sharing__receive-skills/   list/add/install (self-contained)
             └── skills__one_off/                     referenced explicitly, never auto-run
@@ -158,7 +158,7 @@ flowchart LR
 | 9 | Install behaviour | always delete + recreate the workspace | no stale or partial state |
 | 10 | Code location | bundled under `_system/l2_share_skills/.claude` | each level (l3...) owns its own skills + one-offs, no cross-level refactor |
 | 11 | Setup skills | per tool, under `skills__one_off` | referenced explicitly once; never auto-detected at runtime |
-| 12 | Menu | a `up-skill__menu` skill delegating to provide/receive | numbered options; conversation continues naturally |
+| 12 | Menu | a `upskill` skill delegating to provide/receive | numbered options; conversation continues naturally |
 | 13 | Desktop (windows) | plugin package + marketplace | Code-tab local sessions; WSL sessions in Desktop do not load plugins |
 | 14 | Codex | copy skills to `~/.codex/skills` + allow bash/execute | Codex sandbox denies bash by default; must be permitted |
 | 15 | Chat / Cowork | claude.ai account skills (zip upload) | cloud surfaces have no local files; instruction-only skills |

@@ -68,7 +68,7 @@ $coreDir = Join-Path $ws "up-skill"
 Invoke-Git clone --quiet -b $Branch $Core $coreDir
 
 $gskills = Join-Path $coreDir "_system\l2_share_skills\.claude\skills"
-$names = @("up-skill__menu", "up-skill__sharing__provide-skills", "up-skill__sharing__receive-skills")
+$names = @("upskill", "up-skill__sharing__provide-skills", "up-skill__sharing__receive-skills")
 foreach ($n in $names) {
   if (-not (Test-Path (Join-Path $gskills $n))) { throw "error: skill missing at $gskills\$n" }
 }

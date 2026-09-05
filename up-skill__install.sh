@@ -149,7 +149,7 @@ if [[ "$install_global" -eq 1 ]]; then
   gh="$HOME/.claude/skills"
   if [[ -d "$gsrc/up-skill__sharing__receive-skills" ]]; then
     mkdir -p "$gh"
-    for s in up-skill__menu up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+    for s in upskill up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
       rm -rf "$gh/$s"
       cp -R "$gsrc/$s" "$gh/$s"
     done

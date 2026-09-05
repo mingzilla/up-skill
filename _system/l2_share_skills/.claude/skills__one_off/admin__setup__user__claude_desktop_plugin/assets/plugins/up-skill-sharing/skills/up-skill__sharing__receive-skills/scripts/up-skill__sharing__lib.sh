@@ -128,7 +128,7 @@ us_self_update() {
   gh="$HOME/.claude/skills"
   [[ -d "$src/up-skill__sharing__receive-skills" ]] || return 0
   mkdir -p "$gh"
-  for s in up-skill__menu up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+  for s in upskill up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
     [[ -d "$src/$s" ]] || continue
     rm -rf "$gh/$s"
     cp -R "$src/$s" "$gh/$s"

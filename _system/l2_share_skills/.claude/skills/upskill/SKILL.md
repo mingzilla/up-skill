@@ -1,9 +1,9 @@
 ---
-name: up-skill__menu
+name: upskill
 description: Top-level up-skill entry - present the sharing options and act on the user's pick. Triggered by "up-skill", "what can up-skill do", "up-skill menu", "show up-skill options".
 ---
 
-# up-skill__menu
+# upskill
 
 When the user says "up-skill" without a clear verb (or asks what up-skill can do), show this numbered
 menu, then take their next message as the selection:
