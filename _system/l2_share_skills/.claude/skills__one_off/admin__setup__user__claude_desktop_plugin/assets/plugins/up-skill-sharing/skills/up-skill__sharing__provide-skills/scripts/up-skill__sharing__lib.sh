@@ -114,4 +114,23 @@ us_init() {
     exit 1
   fi
   US_ME_DIR="$US_TEAM_DIR/$US_ME_FOLDER"
+
+  # self-update: pull the workspace solution (prod) and refresh the global skills - quiet, best-effort
+  us_self_update
+}
+
+# us_self_update - the user never reruns the installer; on use, pull prod + refresh ~/.claude/skills.
+us_self_update() {
+  local sol="$US_WORKSPACE/up-skill" src gh s
+  [[ -d "$sol/.git" ]] || return 0
+  git -C "$sol" pull --ff-only --quiet 2>/dev/null || true
+  src="$sol/_system/l2_share_skills/.claude/skills"
+  gh="$HOME/.claude/skills"
+  [[ -d "$src/up-skill__sharing__receive-skills" ]] || return 0
+  mkdir -p "$gh"
+  for s in up-skill__menu up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+    [[ -d "$src/$s" ]] || continue
+    rm -rf "$gh/$s"
+    cp -R "$src/$s" "$gh/$s"
+  done
 }
