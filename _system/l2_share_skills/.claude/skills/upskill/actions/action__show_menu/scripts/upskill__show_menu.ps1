@@ -55,7 +55,7 @@ if (Test-Path -LiteralPath $base -PathType Container) {
 
 Write-Output 'Your address book lists teammates for sharing skills. What would you like to do?'
 Write-Output ''
-Write-Output 'Address Books       NN  Members'
+Write-Output 'Address Books       NN  Members - count:name'
 Write-Output ('-' * 70)
 if ($rows.Count -eq 0) {
     Write-Output '(no address books installed - add one to get started)'
