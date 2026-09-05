@@ -1,29 +1,30 @@
 ---
 name: upskill
-description: Top-level upskill entry - present the sharing options and act on the user's pick. Triggered by "upskill", "what can upskill do", "upskill menu", "show upskill options".
+description: On-demand entry to share and receive skills over a team address book. Invoke ONLY when the user explicitly says "use upskill", "/upskill", or "upskill ...". Do not pick this up unprompted - trigger words: "use upskill to <verb>", "/upskill", "upskill".
 ---
 
 # upskill
 
-When the user says "upskill" without a clear verb (or asks what upskill can do), show this numbered
-menu, then take their next message as the selection:
+An on-demand menu. When the user invokes upskill (they say "use upskill ...", "/upskill", or ask what
+upskill can do), do exactly this - no improvising:
 
-```text
-1  share a skill   - publish one of your skills to your own repo
-2  list skills     - what has the team shared
-3  get a skill     - add <owner>'s <skill> into a project
-4  install         - bring skills from any github repo
-```
+1. Run this skill's show-menu script and print its output **verbatim**:
 
-Then act on their reply. A reply may be a number plus details - e.g. `3 from leah, beautiful_skill`
-means "option 3: add leah's beautiful_skill". Map and delegate to the owning skill (do not re-run
-git yourself):
+   - bash (mac / linux / WSL): `bash <this-skill>/actions/action__show_menu/scripts/upskill__show_menu.sh`
+   - PowerShell (native Windows): `powershell -NoProfile -ExecutionPolicy Bypass -File <this-skill>/actions/action__show_menu/scripts/upskill__show_menu.ps1`
 
-| Pick | Delegate to | With |
-|---|---|---|
-| 1 | `upskill__action__provide-skills` | the skill to share (+ optional message) |
-| 2 | `upskill__action__receive-skills` | list |
-| 3 | `upskill__action__receive-skills` | add `<owner>` `<skill>` `<target-dir>` (ask for the project if not given) |
-| 4 | `upskill__action__receive-skills` | install `<url>` [target] |
+   `<this-skill>` is the folder holding this SKILL.md.
 
-If the reply is not a clear pick, ask which option. Report the outcome in one line.
+2. The menu lists the address book + four options. Take the user's next message as their pick and
+   route it (do not re-run git yourself):
+
+   | Pick / phrase | Route to |
+   |---|---|
+   | menu, help, repeat | print the menu again (step 1) |
+   | 1 - add or change address book | read `actions/action__manage_address_book/actions.md` and follow it |
+   | 2 - "show <member>'s skills" | run `upskill__list.sh <member>` (ask which member if none named); the numbered list maps to "Add <n> to <target>" |
+   | 3 - "add <member>'s <skill>" | read `actions/action__receive_skills/actions.md` (add with `--project`) |
+   | 4 - "share my <skill>" | read `actions/action__provide_skills/actions.md` |
+   | "install <github-url>" | read `actions/action__receive_skills/actions.md` (install) |
+
+3. If the reply is not a clear pick, ask which option. Report the outcome in one line.

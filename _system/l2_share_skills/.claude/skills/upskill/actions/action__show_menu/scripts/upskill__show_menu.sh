@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# upskill__home.sh - print the /upskill home screen: every address book, who is in each (with
-# skill counts when their repo is on this machine), which one is current, and the three actions.
+# upskill__show_menu.sh - print the /upskill home screen: every address book, who is in each (with
+# skill counts when their repo is on this machine), which one is current, and the actions.
 # Read-only. The upskill entry skill prints this output verbatim, then acts on the user's pick.
 #
 # Console layout (measured widths, no wrapping guesswork):
@@ -9,17 +9,17 @@
 #   each member token "<count>:<name>" <=14 chars (overflow hidden), 1 space between tokens,
 #   3 tokens per row, continuation rows indented under the Members column
 #
-# usage: bash upskill__home.sh     (run from the workspace, or set UP_SKILL_WORKSPACE)
+# usage: bash upskill__show_menu.sh     (run from the workspace, or set UP_SKILL_WORKSPACE)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# the sibling receive skill ships the workspace-resolution lib; both skills install together
-LIB="$SCRIPT_DIR/../../upskill__action__receive-skills/scripts/upskill__sharing__lib.sh"
+# the shared lib lives at the skill root: scripts/upskill__lib.sh
+LIB="$SCRIPT_DIR/../../../scripts/upskill__lib.sh"
 if [[ ! -f "$LIB" ]]; then
-  echo "error: upskill__action__receive-skills lib not found next to this skill (expected $LIB)" >&2
+  echo "error: shared lib not found (expected $LIB)" >&2
   exit 1
 fi
-# shellcheck source=../../upskill__action__receive-skills/scripts/upskill__sharing__lib.sh
+# shellcheck source=../../../scripts/upskill__lib.sh
 source "$LIB"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"
@@ -87,6 +87,7 @@ PY
 
 echo
 echo "What can you do?"
-echo "  1  Add or change address book"
-echo "  2  Show someone's skills  ->  add a skill to your project"
-echo "  3  Share one of your skills"
+echo "  1  Add or change address book            e.g. \"add an address book\""
+echo "  2  Show a member's skills                e.g. \"show Andy's skills\""
+echo "  3  Add a member's skill directly         e.g. \"add Andy's say_hello skill\""
+echo "  4  Share one of your skills              e.g. \"share my xxx skill\""

@@ -20,7 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run a
 
 # core = this repo when it ships the sharing skills (a clone has them right here); else fetch github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/upskill__address_book__sandbox.git"
-if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/upskill__action__receive-skills" ]]; then
+if [[ -f "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/upskill/SKILL.md" ]]; then
   DEFAULT_CORE="$SCRIPT_DIR"
 else
   DEFAULT_CORE="https://github.com/mingzilla/upskill.git"
@@ -129,9 +129,9 @@ fi
 git clone --quiet -b "$branch" "$core" "$ws/upskill"
 echo "  upskill repo cloned at $ws/upskill"
 
-gskills="$ws/upskill/_system/l2_share_skills/.claude/skills"
-[[ -d "$gskills/upskill__action__receive-skills" ]] \
-  || { echo "error: branch '$branch' ships no upskill sharing skills at $gskills" >&2; exit 1; }
+gskills="$ws/upskill/_system/l2_share_skills/.claude/skills/upskill"
+[[ -f "$gskills/SKILL.md" ]] \
+  || { echo "error: branch '$branch' ships no upskill skill at $gskills" >&2; exit 1; }
 
 # 4. config
 config="$ws/upskill__user-config.json"
@@ -142,18 +142,29 @@ with open(sys.argv[4], "w") as f:
     f.write("\n")' "$user" "$team" "./address_books/$team/$ab_basename" "$config"
 echo "  config written to $config"
 
-# 5. global Claude Code install: copy the sharing skills into ~/.claude/skills so they are
-#    available in every local session, not just inside this workspace.
+# 5. global Claude Code install: copy the single `upskill` skill into ~/.claude/skills (delete the
+#    target first) and sweep legacy skill names from the old three-skill layout.
 if [[ "$install_global" -eq 1 ]]; then
-  gsrc="$ws/upskill/_system/l2_share_skills/.claude/skills"
+  gsrc="$ws/upskill/_system/l2_share_skills/.claude/skills/upskill"
   gh="$HOME/.claude/skills"
-  if [[ -d "$gsrc/upskill__action__receive-skills" ]]; then
+  if [[ -f "$gsrc/SKILL.md" ]]; then
     mkdir -p "$gh"
-    for s in upskill upskill__action__provide-skills upskill__action__receive-skills; do
-      rm -rf "$gh/$s"
-      cp -R "$gsrc/$s" "$gh/$s"
+    # rm_skill <dir> - delete only a real upskill skill under the global skills dir (guarded so a
+    # bad path can never wipe a client's files)
+    rm_skill() {
+      local d="$1"
+      [[ "$d" == "$HOME/.claude/skills/"* ]] || { echo "  refusing to delete outside global skills dir: $d" >&2; return 1; }
+      [[ -e "$d" ]] || return 0
+      [[ -d "$d" && "$(basename "$d")" == upskill* && -f "$d/SKILL.md" ]] || { echo "  refusing to delete (not an upskill skill): $d" >&2; return 1; }
+      rm -rf "$d"
+    }
+    for s in upskill__sharing__provide-skills upskill__sharing__receive-skills \
+             upskill__action__provide-skills upskill__action__receive-skills; do
+      rm_skill "$gh/$s" || return 1
     done
-    echo "  global skills installed at $gh (every Claude Code session)"
+    rm_skill "$gh/upskill" || return 1
+    cp -R "$gsrc" "$gh/upskill"
+    echo "  global upskill skill installed at $gh/upskill (every Claude Code session)"
   else
     echo "  warning: global skills source missing at $gsrc - skipped" >&2
   fi

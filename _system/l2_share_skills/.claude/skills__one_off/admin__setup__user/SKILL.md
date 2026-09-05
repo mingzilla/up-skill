@@ -4,16 +4,15 @@ A user is non-technical. After a one-time install they never see a command line 
 
 Setup is **global**, not per project, and is per tool. See:
 - `admin__setup__user__claude_code` - global in Claude Code (CLI / IDE / Code tab)
-- `admin__setup__user__claude_desktop_plugin` - global in the Claude Desktop Code tab
 - `admin__setup__user__codex` - global in OpenAI Codex (mechanism pending)
 
 ## The user contract
 
 | Touchpoint | What the user does | What happens |
 |---|---|---|
-| One-time install | run `upskill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.upskill__workspace`: clones the team address book + every member's skills repo, installs `upskill__action__provide-skills` + `upskill__action__receive-skills`, writes the config |
-| After install | open Claude **in** `.upskill__workspace` | the two upskill sharing skills are available |
-| Everyday | say "use upskill to ..." | Claude routes to provide (share) or receive (list / get / install) |
+| One-time install | run `upskill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.upskill__workspace`: clones the team address book + every member's skills repo, installs the single `upskill` skill, writes the config |
+| After install | open Claude **in** `.upskill__workspace` | the `upskill` skill is available |
+| Everyday | say "use upskill to ..." | the skill shows the menu; Claude routes to its actions (address book / receive / provide) |
 
 The user never looks inside `.upskill__workspace` and never touches git.
 
@@ -29,5 +28,5 @@ The user never looks inside `.upskill__workspace` and never touches git.
 
 ## In scope today
 
-- WSL / bash only. Windows-no-WSL users get a mirror `ps1` installer later; they will then run the
-  skill from Claude Desktop instead of a workspace folder.
+- Linux / WSL / macOS via the bash installer; native Windows via the PowerShell mirror
+  (`upskill__install.ps1`). Claude Desktop plugin: removed.

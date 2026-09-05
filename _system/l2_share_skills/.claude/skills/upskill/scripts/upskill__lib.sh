@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# upskill__sharing__lib.sh - shared helpers for the upskill client scripts.
-# Sourced (never executed): `source .../upskill__sharing__lib.sh`, then call `us_init`.
+# upskill__lib.sh - shared helpers for the upskill client scripts.
+# Sourced (never executed): `source .../upskill__lib.sh`, then call `us_init`.
 #
 # Resolves the .upskill__workspace (nearest ancestor holding upskill__user-config.json,
 # or $UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* globals.
@@ -119,18 +119,39 @@ us_init() {
   us_self_update
 }
 
-# us_self_update - the user never reruns the installer; on use, pull prod + refresh ~/.claude/skills.
+# us_remove_global_skill <dir> - delete a global skill dir ONLY when it is verified to be an
+# upskill skill: under ~/.claude/skills, basename starts with upskill, and it carries SKILL.md.
+# Guards against a wrong/empty path deleting a client's files. No-op when absent; on anything
+# unexpected it warns and refuses (returns 1) so the caller can skip instead of clobbering.
+us_remove_global_skill() {
+  local d="${1:-}"
+  [[ "$d" == "$HOME/.claude/skills/"* ]] || { echo "refusing to delete outside global skills dir: '$d'" >&2; return 1; }
+  [[ -e "$d" ]] || return 0
+  if [[ ! -d "$d" || "$(basename "$d")" != upskill* || ! -f "$d/SKILL.md" ]]; then
+    echo "refusing to delete (not an upskill skill folder): '$d'" >&2
+    return 1
+  fi
+  rm -rf "$d"
+}
+
+# us_self_update - the user never reruns the installer; on use, pull prod + refresh the single
+# global `upskill` skill (delete-target-first via a temp dir + atomic move), and sweep any legacy
+# global skill names from the old three-skill layout so they cannot re-trigger.
 us_self_update() {
-  local sol="$US_WORKSPACE/upskill" src gh s
+  local sol="$US_WORKSPACE/upskill" src gh tmp s
   [[ -d "$sol/.git" ]] || return 0
   git -C "$sol" pull --ff-only --quiet 2>/dev/null || true
-  src="$sol/_system/l2_share_skills/.claude/skills"
+  src="$sol/_system/l2_share_skills/.claude/skills/upskill"
+  [[ -f "$src/SKILL.md" ]] || return 0
   gh="$HOME/.claude/skills"
-  [[ -d "$src/upskill__action__receive-skills" ]] || return 0
   mkdir -p "$gh"
-  for s in upskill upskill__action__provide-skills upskill__action__receive-skills; do
-    [[ -d "$src/$s" ]] || continue
-    rm -rf "$gh/$s"
-    cp -R "$src/$s" "$gh/$s"
+  for s in upskill__sharing__provide-skills upskill__sharing__receive-skills \
+           upskill__action__provide-skills upskill__action__receive-skills; do
+    us_remove_global_skill "$gh/$s" || return 0
   done
+  us_remove_global_skill "$gh/upskill" || return 0
+  tmp="$gh/.upskill__refresh"
+  rm -rf "$tmp"
+  cp -R "$src" "$tmp"
+  mv "$tmp" "$gh/upskill"
 }

@@ -67,21 +67,36 @@ if ($LASTEXITCODE -ne 0 -or -not $heads) { throw "error: branch '$Branch' not fo
 $coreDir = Join-Path $ws "upskill"
 Invoke-Git clone --quiet -b $Branch $Core $coreDir
 
-$gskills = Join-Path $coreDir "_system\l2_share_skills\.claude\skills"
-$names = @("upskill", "upskill__action__provide-skills", "upskill__action__receive-skills")
-foreach ($n in $names) {
-  if (-not (Test-Path (Join-Path $gskills $n))) { throw "error: skill missing at $gskills\$n" }
-}
+$gskill = Join-Path $coreDir "_system\l2_share_skills\.claude\skills\upskill"
+if (-not (Test-Path (Join-Path $gskill "SKILL.md"))) { throw "error: skill missing at $gskill" }
 
 if (-not $SkipGlobal) {
   $gh = Join-Path $env:USERPROFILE ".claude\skills"
   New-Item -ItemType Directory -Force -Path $gh | Out-Null
-  foreach ($n in $names) {
-    $dst = Join-Path $gh $n
-    if (Test-Path $dst) { Remove-Item -Recurse -Force $dst }
-    Copy-Item -Recurse (Join-Path $gskills $n) $dst
+  # Remove-SkillDir <dir> - delete only a real upskill skill under the global skills dir (guarded
+  # so a bad path can never wipe a client's files). Returns $true when safe to continue.
+  function Remove-SkillDir {
+    param([string]$Dir)
+    if (-not $Dir.StartsWith((Join-Path $env:USERPROFILE ".claude\skills") + '\')) {
+      [Console]::Error.WriteLine("  refusing to delete outside global skills dir: $Dir")
+      return $false
+    }
+    if (-not (Test-Path $Dir)) { return $true }
+    $leaf = Split-Path -Leaf $Dir
+    if (-not (Test-Path (Join-Path $Dir "SKILL.md")) -or -not $leaf.StartsWith("upskill")) {
+      [Console]::Error.WriteLine("  refusing to delete (not an upskill skill): $Dir")
+      return $false
+    }
+    Remove-Item -Recurse -Force $Dir
+    return $true
   }
-  Write-Output "global skills installed at $gh (every Claude Code session)"
+  foreach ($s in @("upskill__sharing__provide-skills", "upskill__sharing__receive-skills", "upskill__action__provide-skills", "upskill__action__receive-skills")) {
+    if (-not (Remove-SkillDir (Join-Path $gh $s))) { return }
+  }
+  $dst = Join-Path $gh "upskill"
+  if (-not (Remove-SkillDir $dst)) { return }
+  Copy-Item -Recurse $gskill $dst
+  Write-Output "global upskill skill installed at $dst (every Claude Code session)"
 }
 
 # config

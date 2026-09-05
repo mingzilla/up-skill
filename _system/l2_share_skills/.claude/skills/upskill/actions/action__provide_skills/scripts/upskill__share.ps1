@@ -1,6 +1,6 @@
-# upskill__sharing__share.ps1 - copy a local skill folder into my skills repo and push it.
-# PowerShell equivalent of upskill__sharing__share.sh.
-# usage: upskill__sharing__share.ps1 <skill-folder|skill-name> [message]
+# upskill__share.ps1 - copy a local skill folder into my skills repo and push it.
+# PowerShell equivalent of upskill__share.sh.
+# usage: upskill__share.ps1 <skill-folder|skill-name> [message]
 param(
     [string]$Skill = '',
     [string]$Message = ''
@@ -8,14 +8,14 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-. (Join-Path $PSScriptRoot 'upskill__sharing__lib.ps1')
+. (Join-Path $PSScriptRoot '../../../scripts/upskill__lib.ps1')
 
 $start = $PWD.Path
 if ($env:UP_SKILL_WORKSPACE) { $start = $env:UP_SKILL_WORKSPACE }
 us_init -StartDir $start
 
 if ([string]::IsNullOrWhiteSpace($Skill)) {
-    us_err 'usage: upskill__sharing__share.ps1 <skill-folder|skill-name> [message]'
+    us_err 'usage: upskill__share.ps1 <skill-folder|skill-name> [message]'
     exit 1
 }
 $src = $Skill

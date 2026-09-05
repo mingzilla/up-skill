@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# upskill__sharing__share.sh - copy a local skill folder into my skills repo and push it.
-# usage: upskill__sharing__share.sh <skill-folder|skill-name> [message]
+# upskill__share.sh - copy a local skill folder into my skills repo and push it.
+# usage: upskill__share.sh <skill-folder|skill-name> [message]
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=upskill__sharing__lib.sh
-source "$SCRIPT_DIR/upskill__sharing__lib.sh"
+# shellcheck source=../../../scripts/upskill__lib.sh
+source "$SCRIPT_DIR/../../../scripts/upskill__lib.sh"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"
 
 src="${1:-}"
 msg="${2:-}"
 if [[ -z "$src" ]]; then
-  echo "usage: upskill__sharing__share.sh <skill-folder|skill-name> [message]" >&2
+  echo "usage: upskill__share.sh <skill-folder|skill-name> [message]" >&2
   exit 1
 fi
 

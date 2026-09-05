@@ -23,7 +23,7 @@ What it removes:
 
 | Removed | Path |
 |---|---|
-| Global skills | `~/.claude/skills/upskill`, `upskill__action__provide-skills`, `upskill__action__receive-skills` (Windows: `%USERPROFILE%\.claude\skills\...`) |
+| Global skill | `~/.claude/skills/upskill` (legacy `upskill__sharing__*` / `upskill__action__*` folders are also swept) |
 | Workspace | `~/.upskill__workspace` (Windows: `%USERPROFILE%\.upskill__workspace`) |
 
 > If the machine was installed with a custom location (`--home` / `-Dir`), delete that

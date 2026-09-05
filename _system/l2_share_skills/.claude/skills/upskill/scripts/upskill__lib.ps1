@@ -1,10 +1,10 @@
-# upskill__sharing__lib.ps1 - shared helpers for the upskill client scripts (PowerShell).
-# Dot-sourced (never run): `. <path>/upskill__sharing__lib.ps1`, then call `us_init`.
+# upskill__lib.ps1 - shared helpers for the upskill client scripts (PowerShell).
+# Dot-sourced (never run): `. <path>/upskill__lib.ps1`, then call `us_init`.
 #
 # Resolves the .upskill__workspace (nearest ancestor holding upskill__user-config.json,
 # or $env:UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* variables.
 #
-# PowerShell equivalent of upskill__sharing__lib.sh. No python needed here: JSON is read with
+# PowerShell equivalent of upskill__lib.sh. No python needed here: JSON is read with
 # the built-in .NET/JSON support, so the ps1 path only requires git.
 
 $ErrorActionPreference = 'Stop'
@@ -151,20 +151,44 @@ function us_init {
     us_self_update
 }
 
-# us_self_update - the user never reruns the installer; on use, pull prod + refresh ~/.claude/skills.
+# us_remove_global_skill <dir> - delete a global skill dir ONLY when it is verified to be an
+# upskill skill: under ~/.claude/skills, basename starts with upskill, and it carries SKILL.md.
+# Guards against a wrong/empty path deleting a client's files. $true when it is safe to continue
+# (removed or absent); $false + warning when the path is unexpected (caller should skip).
+function us_remove_global_skill {
+    param([string]$Dir)
+    if (-not $Dir.StartsWith((Join-Path $HOME '.claude/skills') + [IO.Path]::DirectorySeparatorChar) -and $Dir -ne (Join-Path $HOME '.claude/skills')) {
+        [Console]::Error.WriteLine("refusing to delete outside global skills dir: '$Dir'")
+        return $false
+    }
+    if (-not (Test-Path -LiteralPath $Dir)) { return $true }
+    $leaf = Split-Path -Leaf $Dir
+    if (-not (Test-Path -LiteralPath (Join-Path $Dir 'SKILL.md')) -or -not $leaf.StartsWith('upskill')) {
+        [Console]::Error.WriteLine("refusing to delete (not an upskill skill folder): '$Dir'")
+        return $false
+    }
+    Remove-Item -LiteralPath $Dir -Recurse -Force
+    return $true
+}
+
+# us_self_update - the user never reruns the installer; on use, pull prod + refresh the single
+# global `upskill` skill (delete-target-first via a temp dir + move), and sweep any legacy global
+# skill names from the old three-skill layout so they cannot re-trigger.
 function us_self_update {
     $sol = Join-Path $script:US_WORKSPACE 'upskill'
     if (-not (Test-Path -LiteralPath (Join-Path $sol '.git'))) { return }
     & git -C $sol pull --ff-only --quiet 2>$null
-    $src = Join-Path $sol '_system/l2_share_skills/.claude/skills'
-    if (-not (Test-Path -LiteralPath (Join-Path $src 'upskill__action__receive-skills'))) { return }
+    $src = Join-Path $sol '_system/l2_share_skills/.claude/skills/upskill'
+    if (-not (Test-Path -LiteralPath (Join-Path $src 'SKILL.md'))) { return }
     $gh = Join-Path $HOME '.claude/skills'
     New-Item -ItemType Directory -Force -Path $gh | Out-Null
-    foreach ($s in @('upskill', 'upskill__action__provide-skills', 'upskill__action__receive-skills')) {
-        $sdir = Join-Path $src $s
-        if (-not (Test-Path -LiteralPath $sdir)) { continue }
-        $gdir = Join-Path $gh $s
-        if (Test-Path -LiteralPath $gdir) { Remove-Item -LiteralPath $gdir -Recurse -Force }
-        Copy-Item -LiteralPath $sdir -Destination $gdir -Recurse -Force
+    foreach ($s in @('upskill__sharing__provide-skills', 'upskill__sharing__receive-skills', 'upskill__action__provide-skills', 'upskill__action__receive-skills')) {
+        if (-not (us_remove_global_skill (Join-Path $gh $s))) { return }
     }
+    if (-not (us_remove_global_skill (Join-Path $gh 'upskill'))) { return }
+    $tmp = Join-Path $gh '.upskill__refresh'
+    $target = Join-Path $gh 'upskill'
+    if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
+    Copy-Item -LiteralPath $src -Destination $tmp -Recurse -Force
+    Move-Item -LiteralPath $tmp -Destination $target
 }

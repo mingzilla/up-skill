@@ -1,32 +1,49 @@
----
-name: upskill__action__receive-skills
-description: Bring skills in - inbound. Triggered by "get <owner>'s <skill>", "add <owner>'s <skill> into <project>", "what skills does the team have", "show me users and skills", "install <github-url>". Run when the user wants to RECEIVE/list skills, not share one.
----
+# action__receive_skills
 
-# upskill__action__receive-skills
-
-Bring teammates' shared skills into this machine, and see what is available.
-
-This skill is self-contained: its scripts live in its own `scripts/` folder
-(`.claude/skills/upskill__action__receive-skills/scripts/`, run from the upskill workspace).
+Bring a member's shared skill into a machine, and see what is available. Run the `.sh` with `bash`
+(mac / linux / WSL) or the `.ps1` with PowerShell (native Windows). `<this-skill>` is the folder
+holding the upskill SKILL.md; scripts live under `<this-skill>/actions/action__receive_skills/scripts/`.
 
 ## Verbs
 
-| Verb | User says | Script (run the `.sh` or `.ps1` for your shell) |
+| Verb | User says | Run |
 |---|---|---|
-| list | "what skills does the team have", "show me users and skills" | `upskill__sharing__list.sh` / `upskill__sharing__list.ps1` |
-| add | "get myles' `xxx`", "put leah's `xxx` into my site project" | `upskill__sharing__add.sh` / `.ps1` `"<owner>" "<skill>" "<target-dir>"` |
-| install | "install `https://github.com/...` into this project" | `upskill__sharing__install.sh` / `.ps1` `"<url>" ["<target-dir>"]` |
+| show skills | "show Andy's skills" | `upskill__list.sh "<owner>"` |
+| add | "add Andy's say_hello skill" | `upskill__add.sh "<owner>" "<skill>" --project <scope>` |
+| install | "install `<github-url>` into ..." | `upskill__install.sh "<url>" ["<target-dir>"]` |
 
-Scripts live in `.claude/skills/upskill__action__receive-skills/scripts/`. Run the `.sh` with `bash`
-on mac / linux / WSL, or the `.ps1` with `powershell -NoProfile -ExecutionPolicy Bypass -File` on
-native Windows.
+### show a member's skills (menu option 2 - the wizard)
 
-Resolution rules:
-- `list` - no args; shows each member and their shared skills.
-- `add` - `<owner>` is a name `list` printed; `<target-dir>` is where the skill should become usable:
-  a project's folder (its `.claude/skills` is created there) or the user-level skills dir. If the user
-  does not say, ask - do not guess a path.
-- `install` - any github repo; no address book needed. Copies its `.claude/skills/*` into the target.
+Run `upskill__list.sh "<owner>"` (ask which member if the user only says "show skills"). It prints
+their skills numbered, e.g.:
+
+```text
+ming's skills:
+  1  system__knowledge_map
+  2  weather
+
+say:  Add <number> to <project>    e.g. "Add 1 to my website project"
+```
+
+The user can then reply "Add <n> ...". Resolve `<n>` to the skill name by re-running the same list,
+then do the **add** flow below.
+
+### add a skill (menu option 3 - direct)
+
+`upskill__add.sh "<owner>" "<skill>" --project <scope>` where `<scope>` is one of:
+
+| `--project` | Copies the skill to |
+|---|---|
+| `global` | `~/.claude/skills/<skill>` - available in every session |
+| `current` | this project's `.claude/skills/<skill>` |
+| `<path>` | that project's `.claude/skills/<skill>` |
+
+If the user did not name a target, **ask them** (global / this project / which project) - never guess
+a path. `<owner>` must be a member the show/list output printed.
+
+### install (no address book needed)
+
+`upskill__install.sh "<url>" ["<target-dir>"]` - clones any github repo and copies its
+`.claude/skills/*` (and top-level `SKILL.md` folders) into the target.
 
 Do not improvise git. Report the result in one or two lines.

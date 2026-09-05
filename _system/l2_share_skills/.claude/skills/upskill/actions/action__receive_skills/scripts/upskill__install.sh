@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# upskill__sharing__install.sh - bring skills from a github repo into a project.
-# usage: upskill__sharing__install.sh <repo-url|owner/repo> [target-project-dir]
+# upskill__install.sh - bring skills from a github repo into a project.
+# usage: upskill__install.sh <repo-url|owner/repo> [target-project-dir]
 #
 # Clones the repo, copies every skill under its .claude/skills/ (and any top-level folder that
 # carries a SKILL.md) into <target>/.claude/skills/. Standalone - does not need an address book.
@@ -10,8 +10,8 @@ url="${1:-}"
 target="${2:-$PWD}"
 
 if [[ -z "$url" ]]; then
-  echo "usage: upskill__sharing__install.sh <repo-url|owner/repo> [target-project-dir]" >&2
-  echo "  e.g. upskill__sharing__install.sh https://github.com/mingzilla/upskill" >&2
+  echo "usage: upskill__install.sh <repo-url|owner/repo> [target-project-dir]" >&2
+  echo "  e.g. upskill__install.sh https://github.com/mingzilla/upskill" >&2
   exit 1
 fi
 command -v git >/dev/null 2>&1 || { echo "error: git is required" >&2; exit 1; }
