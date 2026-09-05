@@ -25,9 +25,9 @@
 - **Output:** Shared skill ecosystem with team visibility
 - **User Persona:** Team member consuming/sharing skills
 - **What we're building:**
-    - `up-skill__provide-skills` (share)
-    - `up-skill__receive-skills` (add)
-    - `up-skill__list-skills` (discover)
+    - `upskill__provide-skills` (share)
+    - `upskill__receive-skills` (add)
+    - `upskill__list-skills` (discover)
     - Address book + git repo management
 
 ---
@@ -83,7 +83,7 @@
 
 ## User Journey
 
-> **Non-technical person's path to up-skilling:**
+> **Non-technical person's path to upskilling:**
 >
 > L1 (Make) → L2 (Share) → L3 (Manage) → L4 (Pipeline) → L5 (Optimise)
 >

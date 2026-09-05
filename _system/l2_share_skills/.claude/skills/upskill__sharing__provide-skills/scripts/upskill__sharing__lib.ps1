@@ -1,22 +1,22 @@
-# up-skill__sharing__lib.ps1 - shared helpers for the up-skill client scripts (PowerShell).
-# Dot-sourced (never run): `. <path>/up-skill__sharing__lib.ps1`, then call `us_init`.
+# upskill__sharing__lib.ps1 - shared helpers for the upskill client scripts (PowerShell).
+# Dot-sourced (never run): `. <path>/upskill__sharing__lib.ps1`, then call `us_init`.
 #
-# Resolves the .up-skill__workspace (nearest ancestor holding up-skill__user-config.json,
+# Resolves the .upskill__workspace (nearest ancestor holding upskill__user-config.json,
 # or $env:UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* variables.
 #
-# PowerShell equivalent of up-skill__sharing__lib.sh. No python needed here: JSON is read with
+# PowerShell equivalent of upskill__sharing__lib.sh. No python needed here: JSON is read with
 # the built-in .NET/JSON support, so the ps1 path only requires git.
 
 $ErrorActionPreference = 'Stop'
 
 # US_* state lives in the script scope of whichever command script dot-sources this file.
-$script:US_WORKSPACE = ''       # root of this machine's up-skill__workspace
+$script:US_WORKSPACE = ''       # root of this machine's upskill__workspace
 $script:US_USER = ''            # this member's name (matches the address book)
 $script:US_TEAM = ''            # e.g. team__sandbox
 $script:US_ADDRESS_BOOK = ''    # dir of the cloned address-book repo
 $script:US_AB_JSON = ''         # path to address_book.json
 $script:US_TEAM_DIR = ''        # dir holding the address book + every member's sharing clone
-$script:US_ME_FOLDER = ''       # my skills-repo clone folder name, e.g. up-skill__skills_repo__leah
+$script:US_ME_FOLDER = ''       # my skills-repo clone folder name, e.g. upskill__skills_repo__leah
 $script:US_ME_DIR = ''          # absolute path of my sharing clone
 
 # us_err <message> - write a line to stderr (mirrors bash `>&2`).
@@ -46,13 +46,13 @@ function Read-UpSkillJson {
     return [System.IO.File]::ReadAllText($Path) | ConvertFrom-Json
 }
 
-# us_locate_workspace <start-dir> - nearest ancestor holding up-skill__user-config.json; $null if none.
+# us_locate_workspace <start-dir> - nearest ancestor holding upskill__user-config.json; $null if none.
 function us_locate_workspace {
     param([string]$Dir)
     $d = $Dir
     if (-not (Test-Path -LiteralPath $d -PathType Container)) { $d = Split-Path -Parent $d }
     while ($d) {
-        if (Test-Path -LiteralPath (Join-Path $d 'up-skill__user-config.json')) { return $d }
+        if (Test-Path -LiteralPath (Join-Path $d 'upskill__user-config.json')) { return $d }
         $parent = Split-Path -Parent $d
         if (-not $parent -or $parent -eq $d) { break }   # drive root reached
         $d = $parent
@@ -60,9 +60,9 @@ function us_locate_workspace {
     return $null
 }
 
-# us_load_config - fill the US_* variables from up-skill__user-config.json; $true on success.
+# us_load_config - fill the US_* variables from upskill__user-config.json; $true on success.
 function us_load_config {
-    $cfgPath = Join-Path $script:US_WORKSPACE 'up-skill__user-config.json'
+    $cfgPath = Join-Path $script:US_WORKSPACE 'upskill__user-config.json'
     if (-not (Test-Path -LiteralPath $cfgPath)) { return $false }
     $cfg = Read-UpSkillJson $cfgPath
     $script:US_USER = [string]$cfg.user
@@ -130,11 +130,11 @@ function us_init {
         if ($found) {
             $script:US_WORKSPACE = $found
         }
-        elseif (Test-Path -LiteralPath (Join-Path $HOME '.up-skill__workspace') -PathType Container) {
-            $script:US_WORKSPACE = Join-Path $HOME '.up-skill__workspace'   # global default under the user profile
+        elseif (Test-Path -LiteralPath (Join-Path $HOME '.upskill__workspace') -PathType Container) {
+            $script:US_WORKSPACE = Join-Path $HOME '.upskill__workspace'   # global default under the user profile
         }
         else {
-            us_exit "error: no .up-skill__workspace found from '$StartDir' (looked upward for up-skill__user-config.json)`n  run inside your .up-skill__workspace, or set UP_SKILL_WORKSPACE=<path>"
+            us_exit "error: no .upskill__workspace found from '$StartDir' (looked upward for upskill__user-config.json)`n  run inside your .upskill__workspace, or set UP_SKILL_WORKSPACE=<path>"
         }
     }
     if (-not (us_load_config)) { us_exit "error: cannot read config in $script:US_WORKSPACE" }
@@ -153,14 +153,14 @@ function us_init {
 
 # us_self_update - the user never reruns the installer; on use, pull prod + refresh ~/.claude/skills.
 function us_self_update {
-    $sol = Join-Path $script:US_WORKSPACE 'up-skill'
+    $sol = Join-Path $script:US_WORKSPACE 'upskill'
     if (-not (Test-Path -LiteralPath (Join-Path $sol '.git'))) { return }
     & git -C $sol pull --ff-only --quiet 2>$null
     $src = Join-Path $sol '_system/l2_share_skills/.claude/skills'
-    if (-not (Test-Path -LiteralPath (Join-Path $src 'up-skill__sharing__receive-skills'))) { return }
+    if (-not (Test-Path -LiteralPath (Join-Path $src 'upskill__sharing__receive-skills'))) { return }
     $gh = Join-Path $HOME '.claude/skills'
     New-Item -ItemType Directory -Force -Path $gh | Out-Null
-    foreach ($s in @('upskill', 'up-skill__sharing__provide-skills', 'up-skill__sharing__receive-skills')) {
+    foreach ($s in @('upskill', 'upskill__sharing__provide-skills', 'upskill__sharing__receive-skills')) {
         $sdir = Join-Path $src $s
         if (-not (Test-Path -LiteralPath $sdir)) { continue }
         $gdir = Join-Path $gh $s

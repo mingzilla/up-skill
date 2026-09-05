@@ -1,10 +1,10 @@
-# up-skill__sharing__list.ps1 - list the skills each team member has shared (read-only).
-# PowerShell equivalent of up-skill__sharing__list.sh.
+# upskill__sharing__list.ps1 - list the skills each team member has shared (read-only).
+# PowerShell equivalent of upskill__sharing__list.sh.
 param()
 
 $ErrorActionPreference = 'Stop'
 
-. (Join-Path $PSScriptRoot 'up-skill__sharing__lib.ps1')
+. (Join-Path $PSScriptRoot 'upskill__sharing__lib.ps1')
 
 $start = $PWD.Path
 if ($env:UP_SKILL_WORKSPACE) { $start = $env:UP_SKILL_WORKSPACE }

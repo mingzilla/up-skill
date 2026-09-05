@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# up-skill__sharing__add.sh - copy a teammate's shared skill into a target project.
-# usage: up-skill__sharing__add.sh <owner> <skill-name> <target-project-dir>
+# upskill__sharing__add.sh - copy a teammate's shared skill into a target project.
+# usage: upskill__sharing__add.sh <owner> <skill-name> <target-project-dir>
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=up-skill__sharing__lib.sh
-source "$SCRIPT_DIR/up-skill__sharing__lib.sh"
+# shellcheck source=upskill__sharing__lib.sh
+source "$SCRIPT_DIR/upskill__sharing__lib.sh"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"
 
@@ -13,8 +13,8 @@ owner="${1:-}"
 skill="${2:-}"
 target="${3:-}"
 if [[ -z "$owner" || -z "$skill" || -z "$target" ]]; then
-  echo "usage: up-skill__sharing__add.sh <owner> <skill-name> <target-project-dir>" >&2
-  echo "  e.g. up-skill__sharing__add.sh myles text-cleaner /home/me/projects/site" >&2
+  echo "usage: upskill__sharing__add.sh <owner> <skill-name> <target-project-dir>" >&2
+  echo "  e.g. upskill__sharing__add.sh myles text-cleaner /home/me/projects/site" >&2
   exit 1
 fi
 us_safe_name "$skill"

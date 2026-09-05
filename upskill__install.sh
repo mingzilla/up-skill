@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
-# up-skill__install.sh - build a machine's .up-skill__workspace from scratch.
+# upskill__install.sh - build a machine's .upskill__workspace from scratch.
 #
 # ALWAYS deletes and recreates the whole workspace, so a run never leaves stale or partial
-# state behind. The workspace holds: the up-skill repo (at --branch, default prod), the team
+# state behind. The workspace holds: the upskill repo (at --branch, default prod), the team
 # address book + every member's skills repo, the sharing skills (copied from the repo), config.
 # After install the user only talks to Claude.
 #
-# usage: up-skill__install.sh [--user <name>] [options]
+# usage: upskill__install.sh [--user <name>] [options]
 #   --user <name>         member name (must be in the address book); prompted if omitted
-#   --home <dir>          parent of the workspace; workspace = <home>/.up-skill__workspace
+#   --home <dir>          parent of the workspace; workspace = <home>/.upskill__workspace
 #                         (default: $HOME - prompted interactively if on a terminal)
 #   --address-book <url|path>   address book repo (default: sandbox team)
-#   --core <url|path>     the up-skill project repo (cloned into <ws>/up-skill)
+#   --core <url|path>     the upskill project repo (cloned into <ws>/upskill)
 #                         (default: this repo when run from a clone; else https github)
-#   --branch <name>       which branch of the up-skill repo the workspace takes (default: prod)
+#   --branch <name>       which branch of the upskill repo the workspace takes (default: prod)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run as `curl | bash`
 
 # core = this repo when it ships the sharing skills (a clone has them right here); else fetch github
-DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/up-skill__address_book__sandbox.git"
-if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/up-skill__sharing__receive-skills" ]]; then
+DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/upskill__address_book__sandbox.git"
+if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/upskill__sharing__receive-skills" ]]; then
   DEFAULT_CORE="$SCRIPT_DIR"
 else
-  DEFAULT_CORE="https://github.com/mingzilla/up-skill.git"
+  DEFAULT_CORE="https://github.com/mingzilla/upskill.git"
 fi
 
 user=""
@@ -61,22 +61,22 @@ prompt_default() {
 }
 
 if [[ -z "$user" ]]; then
-  user="$(prompt_default "Your up-skill user name (as in the team address book)" "${UP_SKILL_USER:-}")"
+  user="$(prompt_default "Your upskill user name (as in the team address book)" "${UP_SKILL_USER:-}")"
 fi
 [[ -n "$user" ]] || { echo "error: --user <name> is required (or set UP_SKILL_USER)" >&2; exit 1; }
 
 if [[ -z "$home" ]]; then
-  home="$(prompt_default "Where should the up-skill workspace live? (a hidden .up-skill__workspace folder)" "$HOME")"
+  home="$(prompt_default "Where should the upskill workspace live? (a hidden .upskill__workspace folder)" "$HOME")"
 fi
-ws="$home/.up-skill__workspace"
+ws="$home/.upskill__workspace"
 
-# team dir from address book repo basename: up-skill__address_book__<team> -> team__<team>
+# team dir from address book repo basename: upskill__address_book__<team> -> team__<team>
 team_dir_for() {
   local base
   base="$(basename "${1%%/}")"
   base="${base%.git}"
   case "$base" in
-    up-skill__address_book__*) echo "team__${base#up-skill__address_book__}" ;;
+    upskill__address_book__*) echo "team__${base#upskill__address_book__}" ;;
     *) echo "$base" ;;
   esac
 }
@@ -88,11 +88,11 @@ clone() {
   git clone --quiet "$src" "$dir"
 }
 
-echo "== up-skill install for '$user' =="
+echo "== upskill install for '$user' =="
 echo "workspace: $ws"
 
 # always rebuild the whole workspace - never refresh, so no stale leftovers
-[[ "$(basename "$ws")" == ".up-skill__workspace" ]] || { echo "error: refusing to rebuild $ws" >&2; exit 1; }
+[[ "$(basename "$ws")" == ".upskill__workspace" ]] || { echo "error: refusing to rebuild $ws" >&2; exit 1; }
 echo "rebuilding (deletes $ws)"
 rm -rf "$ws"
 mkdir -p "$ws"
@@ -119,22 +119,22 @@ ab = json.load(open(sys.argv[1]))
 for n, m in ab.get("users", {}).items():
     print(n + "\t" + m.get("folder", "") + "\t" + m.get("repo", ""))' "$ab_json")
 
-# 3. the up-skill repo into the workspace (data anchor - its skills feed the global install)
-echo "-- placing the up-skill repo ($branch):"
+# 3. the upskill repo into the workspace (data anchor - its skills feed the global install)
+echo "-- placing the upskill repo ($branch):"
 if ! git ls-remote --heads "$core" "$branch" 2>/dev/null | grep -q .; then
-  echo "error: branch '$branch' not found in up-skill repo $core" >&2
+  echo "error: branch '$branch' not found in upskill repo $core" >&2
   echo "  create it (e.g. git push origin main:prod) or pass --branch <existing>" >&2
   exit 1
 fi
-git clone --quiet -b "$branch" "$core" "$ws/up-skill"
-echo "  up-skill repo cloned at $ws/up-skill"
+git clone --quiet -b "$branch" "$core" "$ws/upskill"
+echo "  upskill repo cloned at $ws/upskill"
 
-gskills="$ws/up-skill/_system/l2_share_skills/.claude/skills"
-[[ -d "$gskills/up-skill__sharing__receive-skills" ]] \
-  || { echo "error: branch '$branch' ships no up-skill sharing skills at $gskills" >&2; exit 1; }
+gskills="$ws/upskill/_system/l2_share_skills/.claude/skills"
+[[ -d "$gskills/upskill__sharing__receive-skills" ]] \
+  || { echo "error: branch '$branch' ships no upskill sharing skills at $gskills" >&2; exit 1; }
 
 # 4. config
-config="$ws/up-skill__user-config.json"
+config="$ws/upskill__user-config.json"
 python3 -c 'import json,sys
 cfg = {"user": sys.argv[1], "team": sys.argv[2], "address_book": sys.argv[3]}
 with open(sys.argv[4], "w") as f:
@@ -145,11 +145,11 @@ echo "  config written to $config"
 # 5. global Claude Code install: copy the sharing skills into ~/.claude/skills so they are
 #    available in every local session, not just inside this workspace.
 if [[ "$install_global" -eq 1 ]]; then
-  gsrc="$ws/up-skill/_system/l2_share_skills/.claude/skills"
+  gsrc="$ws/upskill/_system/l2_share_skills/.claude/skills"
   gh="$HOME/.claude/skills"
-  if [[ -d "$gsrc/up-skill__sharing__receive-skills" ]]; then
+  if [[ -d "$gsrc/upskill__sharing__receive-skills" ]]; then
     mkdir -p "$gh"
-    for s in upskill up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+    for s in upskill upskill__sharing__provide-skills upskill__sharing__receive-skills; do
       rm -rf "$gh/$s"
       cp -R "$gsrc/$s" "$gh/$s"
     done
@@ -162,4 +162,4 @@ fi
 echo
 echo "== done =="
 echo "open Claude in: $ws"
-echo "then say: use up-skill to share (provide) or get/list skills (receive)"
+echo "then say: use upskill to share (provide) or get/list skills (receive)"

@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# up-skill__sharing__lib.sh - shared helpers for the up-skill client scripts.
-# Sourced (never executed): `source .../up-skill__sharing__lib.sh`, then call `us_init`.
+# upskill__sharing__lib.sh - shared helpers for the upskill client scripts.
+# Sourced (never executed): `source .../upskill__sharing__lib.sh`, then call `us_init`.
 #
-# Resolves the .up-skill__workspace (nearest ancestor holding up-skill__user-config.json,
+# Resolves the .upskill__workspace (nearest ancestor holding upskill__user-config.json,
 # or $UP_SKILL_WORKSPACE) and loads the user config + team address book into US_* globals.
 
 set -euo pipefail
 
-US_WORKSPACE=""       # root of this machine's up-skill__workspace
+US_WORKSPACE=""       # root of this machine's upskill__workspace
 US_USER=""            # this member's name (matches the address book)
 US_TEAM=""            # e.g. team__sandbox
 US_ADDRESS_BOOK=""    # dir of the cloned address-book repo
 US_AB_JSON=""         # path to address_book.json
 US_TEAM_DIR=""        # dir holding the address book + every member's sharing clone
-US_ME_FOLDER=""       # my skills-repo clone folder name, e.g. up-skill__skills_repo__leah
+US_ME_FOLDER=""       # my skills-repo clone folder name, e.g. upskill__skills_repo__leah
 US_ME_DIR=""          # absolute path of my sharing clone
 
 us_require() {
@@ -33,7 +33,7 @@ us_locate_workspace() {
   local dir="${1:-$PWD}"
   [[ -d "$dir" ]] || dir="$(dirname "$dir")"
   while :; do
-    if [[ -f "$dir/up-skill__user-config.json" ]]; then
+    if [[ -f "$dir/upskill__user-config.json" ]]; then
       US_WORKSPACE="$dir"
       return 0
     fi
@@ -43,9 +43,9 @@ us_locate_workspace() {
   return 1
 }
 
-# us_load_config - fill US_* from up-skill__user-config.json
+# us_load_config - fill US_* from upskill__user-config.json
 us_load_config() {
-  local cfg="$US_WORKSPACE/up-skill__user-config.json"
+  local cfg="$US_WORKSPACE/upskill__user-config.json"
   US_USER=$(us_jget "$cfg" 'd["user"]')
   US_TEAM=$(us_jget "$cfg" 'd.get("team", "")')
   local ab_rel
@@ -96,11 +96,11 @@ us_init() {
   us_require git
   if [[ -n "${UP_SKILL_WORKSPACE:-}" && -d "$UP_SKILL_WORKSPACE" ]]; then
     US_WORKSPACE="$UP_SKILL_WORKSPACE"
-  elif ! us_locate_workspace "$start" && [[ -d "$HOME/.up-skill__workspace" ]]; then
-    US_WORKSPACE="$HOME/.up-skill__workspace"   # global default: workspace lives under the user profile
+  elif ! us_locate_workspace "$start" && [[ -d "$HOME/.upskill__workspace" ]]; then
+    US_WORKSPACE="$HOME/.upskill__workspace"   # global default: workspace lives under the user profile
   elif [[ -z "${US_WORKSPACE:-}" ]]; then
-    echo "error: no .up-skill__workspace found from '$start' (looked upward for up-skill__user-config.json)" >&2
-    echo "  run inside your .up-skill__workspace, or set UP_SKILL_WORKSPACE=<path>" >&2
+    echo "error: no .upskill__workspace found from '$start' (looked upward for upskill__user-config.json)" >&2
+    echo "  run inside your .upskill__workspace, or set UP_SKILL_WORKSPACE=<path>" >&2
     exit 1
   fi
   us_load_config || { echo "error: cannot read config in $US_WORKSPACE" >&2; exit 1; }
@@ -121,14 +121,14 @@ us_init() {
 
 # us_self_update - the user never reruns the installer; on use, pull prod + refresh ~/.claude/skills.
 us_self_update() {
-  local sol="$US_WORKSPACE/up-skill" src gh s
+  local sol="$US_WORKSPACE/upskill" src gh s
   [[ -d "$sol/.git" ]] || return 0
   git -C "$sol" pull --ff-only --quiet 2>/dev/null || true
   src="$sol/_system/l2_share_skills/.claude/skills"
   gh="$HOME/.claude/skills"
-  [[ -d "$src/up-skill__sharing__receive-skills" ]] || return 0
+  [[ -d "$src/upskill__sharing__receive-skills" ]] || return 0
   mkdir -p "$gh"
-  for s in upskill up-skill__sharing__provide-skills up-skill__sharing__receive-skills; do
+  for s in upskill upskill__sharing__provide-skills upskill__sharing__receive-skills; do
     [[ -d "$src/$s" ]] || continue
     rm -rf "$gh/$s"
     cp -R "$src/$s" "$gh/$s"

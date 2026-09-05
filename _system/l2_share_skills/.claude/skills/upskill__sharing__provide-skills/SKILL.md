@@ -1,9 +1,9 @@
 ---
-name: up-skill__sharing__provide-skills
+name: upskill__sharing__provide-skills
 description: Share one of your skills with the team - outbound. Triggered by "share this skill", "share my <skill>", "publish my <skill>". Run when the user wants to GIVE a skill, not receive one.
 ---
 
-# up-skill__sharing__provide-skills
+# upskill__sharing__provide-skills
 
 Publish one skill (your choice) to your own skills repo so teammates can receive it.
 
@@ -16,8 +16,8 @@ script for the shell you are in - **do not improvise git**:
 
 | Where you run | Command |
 |---|---|
-| mac / linux / WSL (bash) | `bash .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.sh "<skill>" "<message>"` |
-| native Windows (PowerShell) | `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.ps1 "<skill>" "<message>"` |
+| mac / linux / WSL (bash) | `bash .claude/skills/upskill__sharing__provide-skills/scripts/upskill__sharing__share.sh "<skill>" "<message>"` |
+| native Windows (PowerShell) | `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/skills/upskill__sharing__provide-skills/scripts/upskill__sharing__share.ps1 "<skill>" "<message>"` |
 
-Run from the up-skill workspace. If the script reports a missing skills repo, tell the user to run
+Run from the upskill workspace. If the script reports a missing skills repo, tell the user to run
 the installer first. Report the result in one line.

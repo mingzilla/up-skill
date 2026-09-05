@@ -1,6 +1,6 @@
-# up-skill__sharing__install.ps1 - bring skills from a github repo into a project.
-# PowerShell equivalent of up-skill__sharing__install.sh.
-# usage: up-skill__sharing__install.ps1 <repo-url|owner/repo> [target-project-dir]
+# upskill__sharing__install.ps1 - bring skills from a github repo into a project.
+# PowerShell equivalent of upskill__sharing__install.sh.
+# usage: upskill__sharing__install.ps1 <repo-url|owner/repo> [target-project-dir]
 #
 # Clones the repo, copies every skill under its .claude/skills/ (and any top-level folder that
 # carries a SKILL.md) into <target>/.claude/skills/. Standalone - does not need an address book.
@@ -16,8 +16,8 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     exit 1
 }
 if ([string]::IsNullOrWhiteSpace($Url)) {
-    [Console]::Error.WriteLine('usage: up-skill__sharing__install.ps1 <repo-url|owner/repo> [target-project-dir]')
-    [Console]::Error.WriteLine('  e.g. up-skill__sharing__install.ps1 https://github.com/mingzilla/up-skill')
+    [Console]::Error.WriteLine('usage: upskill__sharing__install.ps1 <repo-url|owner/repo> [target-project-dir]')
+    [Console]::Error.WriteLine('  e.g. upskill__sharing__install.ps1 https://github.com/mingzilla/upskill')
     exit 1
 }
 if ([string]::IsNullOrWhiteSpace($TargetDir)) { $TargetDir = $PWD.Path }

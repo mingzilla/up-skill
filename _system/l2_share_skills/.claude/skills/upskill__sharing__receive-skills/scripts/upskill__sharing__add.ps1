@@ -1,6 +1,6 @@
-# up-skill__sharing__add.ps1 - copy a teammate's shared skill into a target project.
-# PowerShell equivalent of up-skill__sharing__add.sh.
-# usage: up-skill__sharing__add.ps1 <owner> <skill-name> <target-project-dir>
+# upskill__sharing__add.ps1 - copy a teammate's shared skill into a target project.
+# PowerShell equivalent of upskill__sharing__add.sh.
+# usage: upskill__sharing__add.ps1 <owner> <skill-name> <target-project-dir>
 param(
     [string]$Owner = '',
     [string]$Skill = '',
@@ -9,15 +9,15 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-. (Join-Path $PSScriptRoot 'up-skill__sharing__lib.ps1')
+. (Join-Path $PSScriptRoot 'upskill__sharing__lib.ps1')
 
 $start = $PWD.Path
 if ($env:UP_SKILL_WORKSPACE) { $start = $env:UP_SKILL_WORKSPACE }
 us_init -StartDir $start
 
 if ([string]::IsNullOrWhiteSpace($Owner) -or [string]::IsNullOrWhiteSpace($Skill) -or [string]::IsNullOrWhiteSpace($Target)) {
-    us_err 'usage: up-skill__sharing__add.ps1 <owner> <skill-name> <target-project-dir>'
-    us_err '  e.g. up-skill__sharing__add.ps1 myles text-cleaner C:\work\site'
+    us_err 'usage: upskill__sharing__add.ps1 <owner> <skill-name> <target-project-dir>'
+    us_err '  e.g. upskill__sharing__add.ps1 myles text-cleaner C:\work\site'
     exit 1
 }
 if (-not (us_safe_name $Skill)) { exit 1 }
