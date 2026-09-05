@@ -6,25 +6,29 @@ description: On-demand entry to share and receive skills over a team address boo
 # upskill
 
 An on-demand menu. When the user invokes upskill (they say "use upskill ...", "/upskill", or ask what
-upskill can do), do exactly this - no improvising:
+upskill can do):
 
-1. Run this skill's show-menu script and print its output **verbatim**:
+1. Run this skill's show-menu script:
 
    - bash (mac / linux / WSL): `bash <this-skill>/actions/action__show_menu/scripts/upskill__show_menu.sh`
    - PowerShell (native Windows): `powershell -NoProfile -ExecutionPolicy Bypass -File <this-skill>/actions/action__show_menu/scripts/upskill__show_menu.ps1`
 
    `<this-skill>` is the folder holding this SKILL.md.
 
-2. The menu lists the address book + four options. Take the user's next message as their pick and
-   route it (do not re-run git yourself):
+2. Print the script's stdout **verbatim** - the whole reply is exactly what the script printed. Add
+   nothing around it: no bullet point, no heading, no "Here is", no re-stating the address book, no
+   "Which option?". The menu already ends with the four options.
+
+3. Stop and wait. The user's next message is their selection. Route it to the matching action (do
+   not re-run git yourself):
 
    | Pick / phrase | Route to |
    |---|---|
-   | menu, help, repeat | print the menu again (step 1) |
+   | menu, help, repeat | print the menu again (step 1, verbatim) |
    | 1 - add or change address book | read `actions/action__manage_address_book/actions.md` and follow it |
    | 2 - "show <member>'s skills" | run `upskill__list.sh <member>` (ask which member if none named); the numbered list maps to "Add <n> to <target>" |
    | 3 - "add <member>'s <skill>" | read `actions/action__receive_skills/actions.md` (add with `--project`) |
    | 4 - "share my <skill>" | read `actions/action__provide_skills/actions.md` |
    | "install <github-url>" | read `actions/action__receive_skills/actions.md` (install) |
 
-3. If the reply is not a clear pick, ask which option. Report the outcome in one line.
+4. For action results, print the script's output the same way - verbatim, no extra commentary.

@@ -53,6 +53,8 @@ if (Test-Path -LiteralPath $base -PathType Container) {
     }
 }
 
+Write-Output 'Your address book lists teammates for sharing skills. What would you like to do?'
+Write-Output ''
 Write-Output 'Address Books       NN  Members'
 Write-Output ('-' * 70)
 if ($rows.Count -eq 0) {
@@ -76,8 +78,10 @@ else {
 }
 
 Write-Output ''
-Write-Output 'What can you do?'
-Write-Output '  1  Add or change address book            e.g. "add an address book"'
-Write-Output '  2  Show a member''s skills                e.g. "show Andy''s skills"'
-Write-Output '  3  Add a member''s skill directly         e.g. "add Andy''s say_hello skill"'
-Write-Output '  4  Share one of your skills              e.g. "share my xxx skill"'
+Write-Output 'What would you like to do?'
+Write-Output '  1  Show a member''s skills          e.g. "show Andy''s skills"'
+Write-Output '  2  Add a member''s skill            e.g. "add Andy''s say_hello skill"'
+Write-Output '  3  Share your skill                e.g. "share my xxx skill"'
+Write-Output ''
+Write-Output 'To change address book, use option 4'
+Write-Output '  4  Add or change address book      e.g. "add an address book"'

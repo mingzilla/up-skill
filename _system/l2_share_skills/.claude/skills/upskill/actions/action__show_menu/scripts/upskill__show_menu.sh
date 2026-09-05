@@ -24,6 +24,9 @@ source "$LIB"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"
 
+echo "Your address book lists teammates for sharing skills. What would you like to do?"
+echo
+
 python3 - "$US_WORKSPACE" "$US_TEAM" <<'PY'
 import glob
 import json
@@ -66,7 +69,7 @@ if os.path.isdir(base):
         cell = label + (" *" if team == current else "")
         rows.append((0 if team == current else 1, label.lower(), cell, len(users), tokens))
 
-print("Address Books       NN  Members")
+print("Address Books       NN  Members - count:name")
 print("-" * 70)
 if not rows:
     print("(no address books installed - add one to get started)")
@@ -86,8 +89,10 @@ else:
 PY
 
 echo
-echo "What can you do?"
-echo "  1  Add or change address book            e.g. \"add an address book\""
-echo "  2  Show a member's skills                e.g. \"show Andy's skills\""
-echo "  3  Add a member's skill directly         e.g. \"add Andy's say_hello skill\""
-echo "  4  Share one of your skills              e.g. \"share my xxx skill\""
+echo "What would you like to do?"
+echo "  1  Show a member's skills          e.g. \"show Andy's skills\""
+echo "  2  Add a member's skill            e.g. \"add Andy's say_hello skill\""
+echo "  3  Share your skill                e.g. \"share my xxx skill\""
+echo
+echo "To change address book, use option 4"
+echo "  4  Add or change address book      e.g. \"add an address book\""
