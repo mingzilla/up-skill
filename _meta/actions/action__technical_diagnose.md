@@ -21,7 +21,7 @@ Claude Code skills dir:
 | Address book clone | `<ws>/address_books/<team>/upskill__address_book__<team>/` | same |
 | Member sharing repos | `<ws>/address_books/<team>/upskill__skills_repo__<member>/` | same |
 | The upskill product repo | `<ws>/upskill` | same |
-| Global skills | `~/.claude/skills/{upskill, upskill__sharing__provide-skills, upskill__sharing__receive-skills}` | `%USERPROFILE%\.claude\skills\...` |
+| Global skills | `~/.claude/skills/{upskill, upskill__action__provide-skills, upskill__action__receive-skills}` | `%USERPROFILE%\.claude\skills\...` |
 
 Config contents (`upskill__user-config.json`):
 
@@ -46,7 +46,7 @@ Prerequisites by OS:
 | 3 | Config | `upskill__user-config.json` has `user`, `team`, `address_book` | installer was interrupted - re-run it |
 | 4 | Address book | `<address_book>/address_book.json` exists and lists the user | re-run the installer (it clones the address book) |
 | 5 | Global skills | the three `upskill` skills exist in the global skills dir | re-run the installer (it installs the global skills unless run with `--skip-global`) |
-| 6 | Functional | run `bash ~/.claude/skills/upskill__sharing__receive-skills/scripts/upskill__sharing__list.sh` inside the workspace | it prints the team's shared skills - good |
+| 6 | Functional | run `bash ~/.claude/skills/upskill__action__receive-skills/scripts/upskill__sharing__list.sh` inside the workspace | it prints the team's shared skills - good |
 
 ## Error messages and what they mean
 

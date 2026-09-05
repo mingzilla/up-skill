@@ -38,8 +38,8 @@ mingzilla/upskill                       the solution repo
         └── .claude/
             ├── skills/
             │   ├── upskill/                  numbered options -> delegate
-            │   ├── upskill__sharing__provide-skills/   share (self-contained)
-            │   └── upskill__sharing__receive-skills/   list/add/install (self-contained)
+            │   ├── upskill__action__provide-skills/   share (self-contained)
+            │   └── upskill__action__receive-skills/   list/add/install (self-contained)
             └── skills__one_off/                     referenced explicitly, never auto-run
                 ├── admin__setup__administrator/     superset: team + address book + member repos
                 ├── admin__setup__user/              umbrella (non-technical contract)

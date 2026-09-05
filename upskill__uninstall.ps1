@@ -14,7 +14,7 @@ if (-not $Yes) {
 }
 
 $gh = Join-Path $env:USERPROFILE ".claude\skills"
-foreach ($n in @("upskill", "upskill__sharing__provide-skills", "upskill__sharing__receive-skills")) {
+foreach ($n in @("upskill", "upskill__action__provide-skills", "upskill__action__receive-skills")) {
   $p = Join-Path $gh $n
   if (Test-Path $p) { Remove-Item -Recurse -Force $p }
 }

@@ -16,8 +16,8 @@ if [[ "${1:-}" != "--yes" ]]; then
 fi
 
 HOME_SKILLS="$HOME/.claude/skills"
-rm -rf "$HOME_SKILLS/upskill__sharing__provide-skills" \
-       "$HOME_SKILLS/upskill__sharing__receive-skills"
+rm -rf "$HOME_SKILLS/upskill__action__provide-skills" \
+       "$HOME_SKILLS/upskill__action__receive-skills"
 echo "removed global upskill skills from $HOME_SKILLS"
 
 ws="$HOME/.upskill__workspace"

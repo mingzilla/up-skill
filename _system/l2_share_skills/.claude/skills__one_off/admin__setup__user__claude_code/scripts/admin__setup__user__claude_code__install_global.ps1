@@ -22,7 +22,7 @@ if ($LASTEXITCODE -ne 0 -or -not $repoRoot) {
 }
 $src = Join-Path $repoRoot '_system/l2_share_skills/.claude/skills'
 
-foreach ($s in @('upskill', 'upskill__sharing__provide-skills', 'upskill__sharing__receive-skills')) {
+foreach ($s in @('upskill', 'upskill__action__provide-skills', 'upskill__action__receive-skills')) {
     if (-not (Test-Path -LiteralPath (Join-Path $src $s))) {
         [Console]::Error.WriteLine("error: source skill missing: $src/$s")
         exit 1
@@ -32,7 +32,7 @@ foreach ($s in @('upskill', 'upskill__sharing__provide-skills', 'upskill__sharin
 $homeSkills = Join-Path $HOME '.claude/skills'
 New-Item -ItemType Directory -Force -Path $homeSkills | Out-Null
 
-foreach ($s in @('upskill', 'upskill__sharing__provide-skills', 'upskill__sharing__receive-skills')) {
+foreach ($s in @('upskill', 'upskill__action__provide-skills', 'upskill__action__receive-skills')) {
     $gdir = Join-Path $homeSkills $s
     if (Test-Path -LiteralPath $gdir) { Remove-Item -LiteralPath $gdir -Recurse -Force }
     Copy-Item -LiteralPath (Join-Path $src $s) -Destination $gdir -Recurse -Force

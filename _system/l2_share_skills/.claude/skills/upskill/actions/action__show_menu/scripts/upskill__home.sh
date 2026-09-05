@@ -14,12 +14,12 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # the sibling receive skill ships the workspace-resolution lib; both skills install together
-LIB="$SCRIPT_DIR/../../upskill__sharing__receive-skills/scripts/upskill__sharing__lib.sh"
+LIB="$SCRIPT_DIR/../../upskill__action__receive-skills/scripts/upskill__sharing__lib.sh"
 if [[ ! -f "$LIB" ]]; then
-  echo "error: upskill__sharing__receive-skills lib not found next to this skill (expected $LIB)" >&2
+  echo "error: upskill__action__receive-skills lib not found next to this skill (expected $LIB)" >&2
   exit 1
 fi
-# shellcheck source=../../upskill__sharing__receive-skills/scripts/upskill__sharing__lib.sh
+# shellcheck source=../../upskill__action__receive-skills/scripts/upskill__sharing__lib.sh
 source "$LIB"
 
 us_init "${UP_SKILL_WORKSPACE:-$PWD}"

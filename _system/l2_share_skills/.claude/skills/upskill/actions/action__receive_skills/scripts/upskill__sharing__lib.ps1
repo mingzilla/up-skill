@@ -157,10 +157,10 @@ function us_self_update {
     if (-not (Test-Path -LiteralPath (Join-Path $sol '.git'))) { return }
     & git -C $sol pull --ff-only --quiet 2>$null
     $src = Join-Path $sol '_system/l2_share_skills/.claude/skills'
-    if (-not (Test-Path -LiteralPath (Join-Path $src 'upskill__sharing__receive-skills'))) { return }
+    if (-not (Test-Path -LiteralPath (Join-Path $src 'upskill__action__receive-skills'))) { return }
     $gh = Join-Path $HOME '.claude/skills'
     New-Item -ItemType Directory -Force -Path $gh | Out-Null
-    foreach ($s in @('upskill', 'upskill__sharing__provide-skills', 'upskill__sharing__receive-skills')) {
+    foreach ($s in @('upskill', 'upskill__action__provide-skills', 'upskill__action__receive-skills')) {
         $sdir = Join-Path $src $s
         if (-not (Test-Path -LiteralPath $sdir)) { continue }
         $gdir = Join-Path $gh $s

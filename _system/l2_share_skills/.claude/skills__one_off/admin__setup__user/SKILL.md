@@ -11,7 +11,7 @@ Setup is **global**, not per project, and is per tool. See:
 
 | Touchpoint | What the user does | What happens |
 |---|---|---|
-| One-time install | run `upskill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.upskill__workspace`: clones the team address book + every member's skills repo, installs `upskill__sharing__provide-skills` + `upskill__sharing__receive-skills`, writes the config |
+| One-time install | run `upskill__install.sh` (admin guides), answer one question: where the workspace goes | builds a hidden `.upskill__workspace`: clones the team address book + every member's skills repo, installs `upskill__action__provide-skills` + `upskill__action__receive-skills`, writes the config |
 | After install | open Claude **in** `.upskill__workspace` | the two upskill sharing skills are available |
 | Everyday | say "use upskill to ..." | Claude routes to provide (share) or receive (list / get / install) |
 

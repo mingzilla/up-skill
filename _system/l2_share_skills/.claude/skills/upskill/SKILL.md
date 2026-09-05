@@ -21,9 +21,9 @@ git yourself):
 
 | Pick | Delegate to | With |
 |---|---|---|
-| 1 | `upskill__sharing__provide-skills` | the skill to share (+ optional message) |
-| 2 | `upskill__sharing__receive-skills` | list |
-| 3 | `upskill__sharing__receive-skills` | add `<owner>` `<skill>` `<target-dir>` (ask for the project if not given) |
-| 4 | `upskill__sharing__receive-skills` | install `<url>` [target] |
+| 1 | `upskill__action__provide-skills` | the skill to share (+ optional message) |
+| 2 | `upskill__action__receive-skills` | list |
+| 3 | `upskill__action__receive-skills` | add `<owner>` `<skill>` `<target-dir>` (ask for the project if not given) |
+| 4 | `upskill__action__receive-skills` | install `<url>` [target] |
 
 If the reply is not a clear pick, ask which option. Report the outcome in one line.

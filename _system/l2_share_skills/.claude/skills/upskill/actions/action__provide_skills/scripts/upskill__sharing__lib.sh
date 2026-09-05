@@ -126,9 +126,9 @@ us_self_update() {
   git -C "$sol" pull --ff-only --quiet 2>/dev/null || true
   src="$sol/_system/l2_share_skills/.claude/skills"
   gh="$HOME/.claude/skills"
-  [[ -d "$src/upskill__sharing__receive-skills" ]] || return 0
+  [[ -d "$src/upskill__action__receive-skills" ]] || return 0
   mkdir -p "$gh"
-  for s in upskill upskill__sharing__provide-skills upskill__sharing__receive-skills; do
+  for s in upskill upskill__action__provide-skills upskill__action__receive-skills; do
     [[ -d "$src/$s" ]] || continue
     rm -rf "$gh/$s"
     cp -R "$src/$s" "$gh/$s"

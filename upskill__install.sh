@@ -20,7 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"   # $0 when run a
 
 # core = this repo when it ships the sharing skills (a clone has them right here); else fetch github
 DEFAULT_ADDRESS_BOOK="https://github.com/mingzilla/upskill__address_book__sandbox.git"
-if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/upskill__sharing__receive-skills" ]]; then
+if [[ -d "$SCRIPT_DIR/_system/l2_share_skills/.claude/skills/upskill__action__receive-skills" ]]; then
   DEFAULT_CORE="$SCRIPT_DIR"
 else
   DEFAULT_CORE="https://github.com/mingzilla/upskill.git"
@@ -130,7 +130,7 @@ git clone --quiet -b "$branch" "$core" "$ws/upskill"
 echo "  upskill repo cloned at $ws/upskill"
 
 gskills="$ws/upskill/_system/l2_share_skills/.claude/skills"
-[[ -d "$gskills/upskill__sharing__receive-skills" ]] \
+[[ -d "$gskills/upskill__action__receive-skills" ]] \
   || { echo "error: branch '$branch' ships no upskill sharing skills at $gskills" >&2; exit 1; }
 
 # 4. config
@@ -147,9 +147,9 @@ echo "  config written to $config"
 if [[ "$install_global" -eq 1 ]]; then
   gsrc="$ws/upskill/_system/l2_share_skills/.claude/skills"
   gh="$HOME/.claude/skills"
-  if [[ -d "$gsrc/upskill__sharing__receive-skills" ]]; then
+  if [[ -d "$gsrc/upskill__action__receive-skills" ]]; then
     mkdir -p "$gh"
-    for s in upskill upskill__sharing__provide-skills upskill__sharing__receive-skills; do
+    for s in upskill upskill__action__provide-skills upskill__action__receive-skills; do
       rm -rf "$gh/$s"
       cp -R "$gsrc/$s" "$gh/$s"
     done

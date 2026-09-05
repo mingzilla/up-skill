@@ -115,6 +115,6 @@ if someone in claude runs an  upskill ... (i don't know what name to use yet may
 - [ming] - "no problem, wait"
 - [ming] - update upskill core solution
 - [ming] - to leah "leah, give it a go"
-- [leah] - to claude "use upskill to show me users and skills" (and since upskill__sharing__receive-skills pulls from the repo first to update itself)
+- [leah] - to claude "use upskill to show me users and skills" (and since upskill__action__receive-skills pulls from the repo first to update itself)
 - [claude] - shows result in expected format
 ```
