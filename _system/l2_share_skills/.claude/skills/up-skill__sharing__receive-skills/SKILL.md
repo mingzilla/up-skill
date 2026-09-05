@@ -12,13 +12,15 @@ This skill is self-contained: its scripts live in its own `scripts/` folder
 
 ## Verbs
 
-| Verb | User says | Script |
+| Verb | User says | Script (run the `.sh` or `.ps1` for your shell) |
 |---|---|---|
-| list | "what skills does the team have", "show me users and skills" | `up-skill__sharing__list.sh` |
-| add | "get myles' `xxx`", "put leah's `xxx` into my site project" | `up-skill__sharing__add.sh "<owner>" "<skill>" "<target-dir>"` |
-| install | "install `https://github.com/...` into this project" | `up-skill__sharing__install.sh "<url>" ["<target-dir>"]` |
+| list | "what skills does the team have", "show me users and skills" | `up-skill__sharing__list.sh` / `up-skill__sharing__list.ps1` |
+| add | "get myles' `xxx`", "put leah's `xxx` into my site project" | `up-skill__sharing__add.sh` / `.ps1` `"<owner>" "<skill>" "<target-dir>"` |
+| install | "install `https://github.com/...` into this project" | `up-skill__sharing__install.sh` / `.ps1` `"<url>" ["<target-dir>"]` |
 
-Full path: `bash .claude/skills/up-skill__sharing__receive-skills/scripts/<script> <args>`.
+Scripts live in `.claude/skills/up-skill__sharing__receive-skills/scripts/`. Run the `.sh` with `bash`
+on mac / linux / WSL, or the `.ps1` with `powershell -NoProfile -ExecutionPolicy Bypass -File` on
+native Windows.
 
 Resolution rules:
 - `list` - no args; shows each member and their shared skills.

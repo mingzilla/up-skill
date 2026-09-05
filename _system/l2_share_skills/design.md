@@ -44,7 +44,6 @@ mingzilla/up-skill                       the solution repo
                 ├── admin__setup__administrator/     superset: team + address book + member repos
                 ├── admin__setup__user/              umbrella (non-technical contract)
                 ├── admin__setup__user__claude_code/      global install script
-                ├── admin__setup__user__claude_desktop_plugin/  plugin assets + marketplace
                 └── admin__setup__user__codex/            codex setup
 
 team github repos (per team, public or shared)
@@ -141,7 +140,6 @@ flowchart LR
 - The user never reruns the installer: on use, the skill pulls the workspace's solution clone
   (`~/.up-skill__workspace/up-skill`, branch prod) and refreshes the global copies - automatic,
   quiet, best-effort (offline runs still work).
-- Plugin manifest has no `version` -> plugin updates on push.
 
 ## Decisions
 
@@ -159,19 +157,8 @@ flowchart LR
 | 10 | Code location | bundled under `_system/l2_share_skills/.claude` | each level (l3...) owns its own skills + one-offs, no cross-level refactor |
 | 11 | Setup skills | per tool, under `skills__one_off` | referenced explicitly once; never auto-detected at runtime |
 | 12 | Menu | a `upskill` skill delegating to provide/receive | numbered options; conversation continues naturally |
-| 13 | Desktop (windows) | plugin package + marketplace | Code-tab local sessions; WSL sessions in Desktop do not load plugins |
 | 14 | Codex | copy skills to `~/.codex/skills` + allow bash/execute | Codex sandbox denies bash by default; must be permitted |
 | 15 | Chat / Cowork | claude.ai account skills (zip upload) | cloud surfaces have no local files; instruction-only skills |
 | 16 | OS | bash for linux/mac/wsl; powershell mirror for windows | `.sh` cannot run natively on Windows |
 | 17 | Release | `prod` branch = released; `_push_to_prod.sh` | users only ever receive what works |
 | 18 | Updates | self-update on use (pull prod, refresh global skills) | the user never reruns an installer |
-
-## Open items
-
-| Item | Status |
-|---|---|
-| `admin__setup__user__codex` detail (bash-permission step) | to document in the skill |
-| Claude Desktop plugin install exercised on a real Windows local session | pending test |
-| zip-to-claude.ai "get for account" variant of receive | pending build |
-| skill duplication (l2 `.claude/skills` vs plugin assets) single-source cleanup | pending |
-| journey map l1 / l3 / l4 / l5 | separate bundles later (UPS0002 territory for l3) |

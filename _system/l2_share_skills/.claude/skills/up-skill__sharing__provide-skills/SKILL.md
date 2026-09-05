@@ -11,12 +11,13 @@ Resolve the `<skill>`:
 - a folder path that contains `SKILL.md`, or
 - a skill name under the current project's `.claude/skills`.
 
-Ask the user which skill if it is unclear, and for an optional short message. Then run the script -
-**do not improvise git**:
+Ask the user which skill if it is unclear, and for an optional short message. Then run the matching
+script for the shell you are in - **do not improvise git**:
 
-```bash
-bash .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.sh "<skill>" "<message>"
-```
+| Where you run | Command |
+|---|---|
+| mac / linux / WSL (bash) | `bash .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.sh "<skill>" "<message>"` |
+| native Windows (PowerShell) | `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/skills/up-skill__sharing__provide-skills/scripts/up-skill__sharing__share.ps1 "<skill>" "<message>"` |
 
 Run from the up-skill workspace. If the script reports a missing skills repo, tell the user to run
 the installer first. Report the result in one line.
